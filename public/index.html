@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>War Room | Apuração Marcela Passamani 15555 MDB - Deputada Distrital DF</title>
+  <meta name="description" content="Painel de Apuração em Tempo Real e Observabilidade Grafana/Zabbix para Marcela Passamani 15555 MDB - Eleições DF">
+  
+  <!-- Fontes Google -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- Ícones Lucide -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- Chart.js para Grafana & Gráficos -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <!-- Canvas Confetti para comemoração da Vitória -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="dark-theme">
+  <!-- Barra Superior de Controle e Status da Apuração -->
+  <header class="top-nav">
+    <div class="container nav-content">
+      <div class="nav-left">
+        <div class="tse-badge">
+          <span class="live-dot pulse"></span>
+          <span class="tse-text">TSE / TRE-DF AO VIVO</span>
+        </div>
+        <div class="divider"></div>
+        <div class="election-title-group">
+          <h1>WAR ROOM ELEIÇÕES 2026 - DF</h1>
+          <span class="sub-title">Câmara Legislativa do DF (CLDF) • Domingo, 04 de Outubro</span>
+        </div>
+      </div>
+
+      <div class="nav-right">
+        <!-- Indicadores de Monitoramento Zabbix & Grafana -->
+        <div class="system-pills">
+          <div class="pill zabbix-pill" title="Status do Zabbix Agent v7.0">
+            <i data-lucide="activity"></i>
+            <span>ZABBIX: <strong id="zabbixStatus">ONLINE</strong></span>
+          </div>
+          <div class="pill grafana-pill" title="Métricas Grafana v11.0 Ativas">
+            <i data-lucide="gauge"></i>
+            <span>GRAFANA: <strong id="grafanaPing">42ms</strong></span>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Temporizador do Ciclo de 15 minutos com countdown -->
+        <div class="refresh-box">
+          <div class="refresh-info">
+            <span class="refresh-label">Próxima Leitura TSE (<span id="intervalDisplay">15m</span>):</span>
+            <span class="refresh-countdown font-mono" id="countdownTimer">15:00</span>
+          </div>
+          <button id="btnManualRefresh" class="btn-refresh" title="Consultar TSE Diretamente Agora">
+            <i data-lucide="rotate-cw" id="refreshIcon"></i>
+            <span>Consultar TSE</span>
+          </button>
+        </div>
+
+        <!-- Toggle de Som -->
+        <button id="btnSoundToggle" class="btn-icon" title="Ativar/Desativar Efeitos Sonoros">
+          <i data-lucide="volume-2" id="soundIcon"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Container Principal -->
+  <main class="container main-content">
+    
+    <!-- BANNER HERO: CANDIDATA MARCELA PASSAMANI 15555 MDB -->
+    <section class="candidate-hero-card" id="candidateHeroCard">
+      <div class="hero-left">
+        <div class="portrait-wrapper">
+          <img src="assets/marcela_passamani.jpg?v=2" alt="Marcela Passamani" class="candidate-photo" id="candidatePhoto">
+          <div class="portrait-badge">
+            <span class="badge-number">15.555</span>
+          </div>
+        </div>
+
+        <div class="hero-details">
+          <div class="badge-row">
+            <span class="party-tag mdb-tag">MDB</span>
+            <span class="coligacao-tag">MDB / PP / UNIÃO / AVANTE</span>
+            <span class="rank-tag" id="rankingBadge">#3 LUGAR GERAL</span>
+          </div>
+          <h2 class="candidate-name">MARCELA PASSAMANI</h2>
+          <p class="candidate-role">Candidata a Deputada Distrital • Número 15.555 • MDB - DF</p>
+          
+          <!-- Status Dinâmico de Eleição -->
+          <div class="status-indicator-box" id="statusIndicatorBox">
+            <div class="status-main">
+              <span class="status-pulse-dot" id="statusDot"></span>
+              <span class="status-text" id="statusText">EM APURAÇÃO - DENTRO DAS VAGAS</span>
+            </div>
+            <div class="status-sub" id="statusSub">Projeção matemática com dados oficiais e quociente partidário do MDB</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <!-- Grande Contador de Votos -->
+        <div class="big-vote-counter">
+          <span class="counter-label">TOTAL DE VOTOS APURADOS</span>
+          <div class="vote-number font-mono" id="voteCountNumber">0</div>
+          <div class="vote-percentage">
+            <span id="votePercentageValid">0.00%</span> dos votos válidos do DF
+          </div>
+        </div>
+
+        <!-- Termômetro de Eleição / Quociente Eleitoral -->
+        <div class="election-thermometer">
+          <div class="thermometer-header">
+            <span>Meta de Segurança MDB: <strong>24.500 votos</strong></span>
+            <span class="prob-text">Probabilidade: <strong id="probNumber">88.5%</strong></span>
+          </div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="probBarFill" style="width: 45%;"></div>
+          </div>
+          <div class="thermometer-footer font-mono">
+            <span>Quociente Partidário MDB: <strong>ASSEGURADO</strong></span>
+            <span id="gapVotosText">Acompanhando apuração urna a urna</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BARRA DE MÉTRICAS RÁPIDAS DA ELEIÇÃO DF -->
+    <section class="quick-stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon icon-blue"><i data-lucide="pie-chart"></i></div>
+        <div class="stat-content">
+          <span class="stat-label">Total Apurado no DF</span>
+          <h3 class="stat-value font-mono" id="statPercentualApurado">0.00%</h3>
+          <span class="stat-sub" id="statSecoes"><span id="statSecoesApuradas">0</span> de 6.850 seções</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon icon-green"><i data-lucide="check-check"></i></div>
+        <div class="stat-content">
+          <span class="stat-label">Total de Votos Válidos</span>
+          <h3 class="stat-value font-mono" id="statVotosValidos">0</h3>
+          <span class="stat-sub">Votos nominais + legenda</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon icon-purple"><i data-lucide="scale"></i></div>
+        <div class="stat-content">
+          <span class="stat-label">Quociente Eleitoral DF</span>
+          <h3 class="stat-value font-mono" id="statQuociente">71.200</h3>
+          <span class="stat-sub">Base para 24 vagas CLDF</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon icon-gold"><i data-lucide="award"></i></div>
+        <div class="stat-content">
+          <span class="stat-label">Vagas em Disputa</span>
+          <h3 class="stat-value font-mono">24 CADEIRAS</h3>
+          <span class="stat-sub">CLDF - 10ª Legislatura</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- NAVEGAÇÃO POR ABAS -->
+    <div class="tabs-header">
+      <button class="tab-btn active" data-tab="tab-warroom">
+        <i data-lucide="layout-dashboard"></i>
+        <span>Visão Geral & War Room</span>
+      </button>
+      <button class="tab-btn" data-tab="tab-grafana">
+        <i data-lucide="gauge"></i>
+        <span>Painel Grafana (Observabilidade)</span>
+      </button>
+      <button class="tab-btn" data-tab="tab-zabbix">
+        <i data-lucide="shield-alert"></i>
+        <span>Monitor Zabbix (Infra & Zonas)</span>
+      </button>
+      <button class="tab-btn" data-tab="tab-settings">
+        <i data-lucide="sliders"></i>
+        <span>TSE Oficial & Simulador</span>
+      </button>
+    </div>
+
+    <!-- ABA 1: WAR ROOM / VISÃO GERAL -->
+    <section class="tab-pane active" id="tab-warroom">
+      <div class="warroom-grid">
+        <!-- Votos por Região Administrativa -->
+        <div class="panel-box">
+          <div class="panel-header">
+            <div class="panel-title">
+              <i data-lucide="map-pin"></i>
+              <h3>Votos da Marcela Passamani (15555 MDB) por Região do DF</h3>
+            </div>
+            <span class="panel-tag">21 Zonas Eleitorais TRE-DF</span>
+          </div>
+          <div class="panel-body">
+            <div class="chart-container" style="height: 280px;">
+              <canvas id="regionalChart"></canvas>
+            </div>
+            <div class="regional-list" id="regionalList">
+              <!-- Preenchido via JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Ranking dos 24 Deputados Distritais -->
+        <div class="panel-box">
+          <div class="panel-header">
+            <div class="panel-title">
+              <i data-lucide="list-ordered"></i>
+              <h3>Quadro Geral da CLDF (24 Vagas Eleitas)</h3>
+            </div>
+            <span class="panel-tag highlight-tag">Ao Vivo</span>
+          </div>
+          <div class="panel-body table-responsive">
+            <table class="ranking-table">
+              <thead>
+                <tr>
+                  <th>Pos.</th>
+                  <th>Candidato(a)</th>
+                  <th>Partido</th>
+                  <th>Número</th>
+                  <th>Votos</th>
+                  <th>% Válidos</th>
+                  <th>Situação</th>
+                </tr>
+              </thead>
+              <tbody id="rankingTableBody">
+                <!-- Preenchido via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABA 2: PAINEL GRAFANA (OBSERVABILIDADE) -->
+    <section class="tab-pane" id="tab-grafana">
+      <div class="grafana-header-bar">
+        <div class="grafana-brand">
+          <img src="https://grafana.com/static/img/menu/grafana2.svg" alt="Grafana" class="grafana-logo" onerror="this.style.display='none'">
+          <span>Grafana Dashboard • Eleições DF • Marcela Passamani (15555 MDB)</span>
+        </div>
+        <div class="grafana-controls">
+          <span class="grafana-timerange">Últimas 2 Horas (Tempo Real)</span>
+        </div>
+      </div>
+
+      <div class="grafana-grid">
+        <div class="grafana-panel">
+          <div class="grafana-panel-title">
+            <span>📈 Votos / Ritmo de Apuração (Marcela Passamani 15555)</span>
+          </div>
+          <div class="grafana-panel-body">
+            <canvas id="grafanaVotesRateChart"></canvas>
+          </div>
+        </div>
+
+        <div class="grafana-panel">
+          <div class="grafana-panel-title">
+            <span>⚡ Latência da API do TSE (ms) & Throughput de Requisições</span>
+          </div>
+          <div class="grafana-panel-body">
+            <canvas id="grafanaLatencyChart"></canvas>
+          </div>
+        </div>
+
+        <div class="grafana-panel">
+          <div class="grafana-panel-title">
+            <span>🗳️ Composição de Votos no DF</span>
+          </div>
+          <div class="grafana-panel-body">
+            <canvas id="grafanaVotesCompositionChart"></canvas>
+          </div>
+        </div>
+
+        <div class="grafana-panel">
+          <div class="grafana-panel-title">
+            <span>🖥️ Status dos Nós de Ingestão e Scraper TSE</span>
+          </div>
+          <div class="grafana-panel-body">
+            <div class="server-status-list" id="grafanaServerList">
+              <!-- Preenchido via JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABA 3: MONITOR ZABBIX (INFRAESTRUTURA & ZONAS TRE-DF) -->
+    <section class="tab-pane" id="tab-zabbix">
+      <div class="zabbix-header-bar">
+        <div class="zabbix-brand">
+          <span class="zabbix-tag">ZABBIX 7.0 ENTERPRISE</span>
+          <span>Monitoramento de Agentes nas 21 Zonas Eleitorais do Distrito Federal</span>
+        </div>
+        <div class="zabbix-summary">
+          <span class="badge-ok">4 HOSTS OK</span>
+          <span class="badge-info" id="zabbixAlertCount">2 TRIGGERS ATIVOS</span>
+        </div>
+      </div>
+
+      <div class="zabbix-grid">
+        <div class="panel-box">
+          <div class="panel-header">
+            <div class="panel-title">
+              <i data-lucide="radio"></i>
+              <h3>Agentes Zabbix por Zona Eleitoral do Distrito Federal</h3>
+            </div>
+            <span class="panel-tag">21 Zonas Ativas</span>
+          </div>
+          <div class="panel-body">
+            <div class="zones-grid" id="zabbixZonesGrid">
+              <!-- Preenchido via JS -->
+            </div>
+          </div>
+        </div>
+
+        <div class="panel-box">
+          <div class="panel-header">
+            <div class="panel-title">
+              <i data-lucide="alert-triangle"></i>
+              <h3>Triggers & Eventos de Monitoramento Zabbix</h3>
+            </div>
+          </div>
+          <div class="panel-body table-responsive">
+            <table class="ranking-table zabbix-table">
+              <thead>
+                <tr>
+                  <th>Severidade</th>
+                  <th>Hora</th>
+                  <th>Descrição do Evento / Trigger</th>
+                  <th>ID</th>
+                </tr>
+              </thead>
+              <tbody id="zabbixTriggersTableBody">
+                <!-- Preenchido via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABA 4: CONFIGURAÇÕES, FEED OFICIAL TSE & SIMULADOR -->
+    <section class="tab-pane" id="tab-settings">
+      <div class="settings-grid">
+        <!-- Caixa 1: Conexão Direta Oficial TSE -->
+        <div class="panel-box">
+          <div class="panel-header">
+            <div class="panel-title">
+              <i data-lucide="globe"></i>
+              <h3>Conector Direto Oficial do TSE (Site do TSE)</h3>
+            </div>
+          </div>
+          <div class="panel-body">
+            <form id="formConfig">
+              <div class="form-group">
+                <label for="selectModoFonte">Fonte de Alimentação:</label>
+                <select id="selectModoFonte" class="form-control">
+                  <option value="tse_oficial" selected>Direto do Site do TSE (Resultados Oficiais)</option>
+                  <option value="simulado">Modo Simulação Inteligente (Treinamento War Room)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="selectIntervalo">Intervalo de Consulta Automática ao TSE:</label>
+                <select id="selectIntervalo" class="form-control">
+                  <option value="15" selected>A cada 15 minutos (Padrão configurado)</option>
+                  <option value="30">A cada 30 minutos</option>
+                  <option value="5">A cada 5 minutos (Recomendado para apuração acelerada)</option>
+                  <option value="1">A cada 1 minuto (War Room Intensivo)</option>
+                  <option value="0.5">A cada 30 segundos (Super Rápido)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="inputTseUrl">URL Endpoint JSON do TSE Divulga (DF):</label>
+                <input type="url" id="inputTseUrl" class="form-control font-mono" value="https://resultados.tse.jus.br/oficial/ele2026/600/dados-simplificados/df/df-c0007-e000600-r.json">
+              </div>
+
+              <div class="sim-btn-group" style="margin-top: 16px;">
+                <button type="submit" class="btn-action btn-blue">
+                  <i data-lucide="save"></i> Salvar Configurações
+                </button>
+                <button type="button" id="btnSyncTseNow" class="btn-action btn-gold">
+                  <i data-lucide="refresh-cw"></i> Forçar Leitura Imediata Direto do TSE
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Caixa 2: Simulador para Treinamento de War Room -->
+        <div class="panel-box">
+          <div class="panel-header">
+            <div class="panel-title">
+              <i data-lucide="play-circle"></i>
+              <h3>Simulador de Apuração & Teste de Vitória</h3>
+            </div>
+          </div>
+          <div class="panel-body">
+            <p class="settings-desc">
+              Teste o comportamento dos gráficos, as notificações do Zabbix e a tela de vitória da 
+              <strong>Marcela Passamani (15555 MDB)</strong>.
+            </p>
+
+            <div class="sim-control-group">
+              <label for="sliderApuracao">Percentual de Apuração Simulado: <strong id="sliderValue">25%</strong></label>
+              <input type="range" id="sliderApuracao" min="0" max="100" step="5" value="25" class="slider">
+            </div>
+
+            <div class="sim-btn-group">
+              <button id="btnAvancarPasso" class="btn-action">
+                <i data-lucide="fast-forward"></i> Avançar +15% de Apuração
+              </button>
+              <button id="btnSimularVitoria" class="btn-action btn-gold">
+                <i data-lucide="trophy"></i> Disparar Celebração de Eleita (100% Eleita)
+              </button>
+              <button id="btnResetarEleicao" class="btn-action btn-outline">
+                <i data-lucide="refresh-cw"></i> Reiniciar Simulação
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL DE CELEBRAÇÃO ÉPICA DE VITÓRIA (ELEITA DEPUTADA DISTRITAL) -->
+  <div class="victory-overlay" id="victoryOverlay">
+    <div class="victory-modal">
+      <div class="confetti-cannon-icon">🏆</div>
+      <div class="victory-banner-badge">VITÓRIA OFICIAL • MDB DF</div>
+      
+      <h1 class="victory-title">MARCELA PASSAMANI É ELEITA!</h1>
+      <h2 class="victory-subtitle">DEPUTADA DISTRITAL DO DISTRITO FEDERAL • NÚMERO 15.555 (MDB)</h2>
+
+      <div class="victory-candidate-card">
+        <img src="assets/marcela_passamani.jpg?v=2" alt="Marcela Passamani" class="victory-photo">
+        <div class="victory-stats">
+          <div class="v-stat">
+            <span class="v-label">Total Final de Votos</span>
+            <span class="v-val font-mono" id="victoryVotesNumber">32.450</span>
+          </div>
+          <div class="v-stat">
+            <span class="v-label">Posição Geral na CLDF</span>
+            <span class="v-val font-mono" id="victoryRank">#3 LUGAR</span>
+          </div>
+          <div class="v-stat">
+            <span class="v-label">Legenda</span>
+            <span class="v-val status-green">MDB - ELEITA POR QUOCIENTE PARTIDÁRIO</span>
+          </div>
+        </div>
+      </div>
+
+      <p class="victory-message">
+        Brasília celebrou a vitória! O compromisso e a dedicação de Marcela Passamani garantiram a cadeira na Câmara Legislativa do Distrito Federal!
+      </p>
+
+      <div class="victory-actions">
+        <button class="btn-action btn-gold" id="btnCelebrarMais">
+          <i data-lucide="sparkles"></i> Mais Fogos e Fanfarra!
+        </button>
+        <button class="btn-action btn-outline" id="btnFecharVitoria">
+          <i data-lucide="x"></i> Fechar e Voltar ao Painel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container footer-content">
+      <span>Sistema de Apuração & Inteligência Eleitoral • Marcela Passamani 15555 MDB • Eleições DF</span>
+      <span class="footer-copy">Conexão direta com TSE Divulga & Observabilidade Zabbix / Grafana</span>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "name": "apuracao-marcela-passamani",
+  "version": "1.0.0",
+  "description": "Sistema de Apuração ao Vivo e Monitoramento para Marcela Passamani - Deputada Distrital DF",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
+  }
+}
