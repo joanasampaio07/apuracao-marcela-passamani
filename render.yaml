@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: apuracao-marcela-passamani
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: PORT
+        generateValue: false
+        value: 10000
+    autoDeploy: true
