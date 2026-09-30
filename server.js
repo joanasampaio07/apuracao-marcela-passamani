@@ -367,33 +367,33 @@ async function consultarCDNDoTSE() {
 
 function atualizarDadosSaoSebastiao(votosMarcelaAtual) {
   const totalVotosSaoSebastiao = Math.max(0, Math.round(votosMarcelaAtual * 0.101));
+  const shares = [0.28, 0.22, 0.18, 0.14, 0.08, 0.05, 0.03, 0.02];
 
   const colegios = SAO_SEBASTIAO_LOCALS.map((local, index) => {
-    const pesos = local.secoes.map((_, idx) => {
-      const base = 1 + ((idx + index) % 3) * 0.2;
-      return base;
+    const share = shares[index] ?? 0.02;
+    const totalColegio = Math.max(0, Math.round(totalVotosSaoSebastiao * share));
+    const secoes = local.secoes.map((secao, secaoIndex) => {
+      const base = secaoIndex === 0 && local.secoes.length > 1
+        ? totalColegio - Math.floor(totalColegio * (local.secoes.length - 1) / local.secoes.length)
+        : Math.floor(totalColegio / local.secoes.length);
+      return { secao, votos: Math.max(0, base) };
     });
 
-    const secoes = local.secoes.map((secao, idx) => {
-      const pesoTotal = pesos.reduce((sum, peso) => sum + peso, 0);
-      const votos = Math.max(0, Math.round((totalVotosSaoSebastiao * pesos[idx]) / pesoTotal));
-      return { secao, votos };
-    });
+    const totalCalculado = secoes.reduce((sum, secao) => sum + secao.votos, 0);
+    const diff = totalColegio - totalCalculado;
+    if (diff !== 0 && secoes.length > 0) {
+      secoes[0].votos += diff;
+    }
 
-    const totalColegio = secoes.reduce((sum, secao) => sum + secao.votos, 0);
     return {
       codigo_local: local.codigo_local,
       nome: local.nome,
-      totalColegio,
+      totalColegio: secoes.reduce((sum, secao) => sum + secao.votos, 0),
       secoes
     };
   });
 
-  let totalColegioAjustado = 0;
-  colegios.forEach((colegio) => {
-    totalColegioAjustado += colegio.totalColegio;
-  });
-
+  const totalColegioAjustado = colegios.reduce((sum, colegio) => sum + colegio.totalColegio, 0);
   const diferenca = totalVotosSaoSebastiao - totalColegioAjustado;
   if (Math.abs(diferenca) > 0 && colegios.length) {
     colegios[0].secoes[0].votos += diferenca;
