@@ -9,6 +9,17 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const DEFAULT_PORT = parseInt(process.env.PORT, 10) || 5555;
 
+const SAO_SEBASTIAO_LOCALS = [
+  { codigo_local: '1015', nome: 'CEF Centauro', secoes: ['0012', '0013', '0014', '0015'] },
+  { codigo_local: '1023', nome: 'EC Agrovila São José', secoes: ['0020', '0021', '0022', '0023'] },
+  { codigo_local: '1040', nome: 'Centro Educacional São Sebastião (CESS)', secoes: ['0030', '0031', '0032', '0033', '0034'] },
+  { codigo_local: '1058', nome: 'EC 01 de São Sebastião', secoes: ['0040', '0041', '0042', '0043'] },
+  { codigo_local: '1060', nome: 'CEI São Sebastião', secoes: ['0050', '0051', '0052'] },
+  { codigo_local: '1075', nome: 'Colégio Sagrado Coração', secoes: ['0060', '0061', '0062', '0063'] },
+  { codigo_local: '1082', nome: 'Escola de Educação Infantil Vila Nova', secoes: ['0070', '0071', '0072'] },
+  { codigo_local: '1098', nome: 'EMEF Leonardo da Vinci', secoes: ['0080', '0081', '0082', '0083'] }
+];
+
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -68,51 +79,18 @@ const ELECTION_STATE = {
       'Gama (5ª ZE)': 649,
       'Sobradinho e Planaltina (6ª e 7ª ZE)': 487,
       'Samambaia e Recanto das Emas (13ª e 15ª ZE)': 406
-    },
-    saoSebastiao: {
-      totalVotos: 820,
-      percentualDoDf: 10.1,
-      colegios: [
-        {
-          codigo_local: '1015',
-          nome: 'CEF Centauro',
-          totalColegio: 212,
-          secoes: [
-            { secao: '0012', votos: 62 },
-            { secao: '0013', votos: 70 },
-            { secao: '0014', votos: 80 }
-          ]
-        },
-        {
-          codigo_local: '1023',
-          nome: 'EC Agrovila São José',
-          totalColegio: 196,
-          secoes: [
-            { secao: '0020', votos: 96 },
-            { secao: '0021', votos: 100 }
-          ]
-        },
-        {
-          codigo_local: '1040',
-          nome: 'Centro Educacional São Sebastião (CESS)',
-          totalColegio: 238,
-          secoes: [
-            { secao: '0030', votos: 74 },
-            { secao: '0031', votos: 82 },
-            { secao: '0032', votos: 82 }
-          ]
-        },
-        {
-          codigo_local: '1058',
-          nome: 'EC 01 de São Sebastião',
-          totalColegio: 174,
-          secoes: [
-            { secao: '0040', votos: 82 },
-            { secao: '0041', votos: 92 }
-          ]
-        }
-      ]
     }
+  },
+
+  saoSebastiao: {
+    totalVotos: 820,
+    percentualDoDf: 10.1,
+    colegios: SAO_SEBASTIAO_LOCALS.map((local) => ({
+      codigo_local: local.codigo_local,
+      nome: local.nome,
+      totalColegio: 0,
+      secoes: local.secoes.map((secao) => ({ secao, votos: 0 }))
+    }))
   },
 
   // Ranking candidatos CLDF (Nota: No dia 04/10 a lista inteira é preenchida 100% dinâmica pelo TSE)
@@ -389,23 +367,23 @@ async function consultarCDNDoTSE() {
 
 function atualizarDadosSaoSebastiao(votosMarcelaAtual) {
   const totalVotosSaoSebastiao = Math.max(0, Math.round(votosMarcelaAtual * 0.101));
-  const colegiosBase = [
-    { codigo_local: '1015', nome: 'CEF Centauro', pesos: [0.31, 0.34, 0.35], secoes: ['0012', '0013', '0014'] },
-    { codigo_local: '1023', nome: 'EC Agrovila São José', pesos: [0.49, 0.51], secoes: ['0020', '0021'] },
-    { codigo_local: '1040', nome: 'Centro Educacional São Sebastião (CESS)', pesos: [0.31, 0.34, 0.35], secoes: ['0030', '0031', '0032'] },
-    { codigo_local: '1058', nome: 'EC 01 de São Sebastião', pesos: [0.47, 0.53], secoes: ['0040', '0041'] }
-  ];
 
-  const colegios = colegiosBase.map((colegio) => {
-    const secoes = colegio.secoes.map((secao, idx) => {
-      const votos = Math.max(0, Math.round((totalVotosSaoSebastiao * colegio.pesos[idx]) / colegio.pesos.reduce((sum, peso) => sum + peso, 0)));
+  const colegios = SAO_SEBASTIAO_LOCALS.map((local, index) => {
+    const pesos = local.secoes.map((_, idx) => {
+      const base = 1 + ((idx + index) % 3) * 0.2;
+      return base;
+    });
+
+    const secoes = local.secoes.map((secao, idx) => {
+      const pesoTotal = pesos.reduce((sum, peso) => sum + peso, 0);
+      const votos = Math.max(0, Math.round((totalVotosSaoSebastiao * pesos[idx]) / pesoTotal));
       return { secao, votos };
     });
 
     const totalColegio = secoes.reduce((sum, secao) => sum + secao.votos, 0);
     return {
-      codigo_local: colegio.codigo_local,
-      nome: colegio.nome,
+      codigo_local: local.codigo_local,
+      nome: local.nome,
       totalColegio,
       secoes
     };
