@@ -257,6 +257,117 @@ body {
   padding-bottom: 60px;
 }
 
+.sao-sebastiao-wrap {
+  margin-top: 24px;
+}
+
+.sao-sebastiao-panel .panel-body {
+  display: block;
+}
+
+.sao-sebastiao-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 20px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.14), rgba(6, 182, 212, 0.08));
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  margin-bottom: 18px;
+}
+
+.sao-sebastiao-summary-main {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sao-sebastiao-pill {
+  display: inline-flex;
+  width: fit-content;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(59, 130, 246, 0.14);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  color: #7dd3fc;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.sao-sebastiao-total {
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  color: var(--text-main);
+  font-weight: 800;
+}
+
+.sao-sebastiao-meta {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.sao-sebastiao-list {
+  display: grid;
+  gap: 14px;
+}
+
+.sao-sebastiao-school {
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.62);
+  overflow: hidden;
+}
+
+.sao-sebastiao-school summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  list-style: none;
+  cursor: pointer;
+  padding: 16px 18px;
+  color: var(--text-main);
+  font-weight: 600;
+}
+
+.sao-sebastiao-school summary::-webkit-details-marker {
+  display: none;
+}
+
+.sao-sebastiao-school summary strong {
+  color: var(--accent-cyan);
+  font-size: 0.9rem;
+}
+
+.sao-sebastiao-secoes {
+  list-style: none;
+  padding: 0 18px 16px;
+  display: grid;
+  gap: 8px;
+}
+
+.sao-sebastiao-secoes li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  color: var(--text-muted);
+}
+
+.sao-sebastiao-secoes li strong {
+  color: var(--text-main);
+}
+
+.sao-sebastiao-no-data {
+  color: var(--text-muted);
+  padding: 12px 0;
+}
+
 /* CANDIDATE HERO CARD */
 .candidate-hero-card {
   background: #111827;

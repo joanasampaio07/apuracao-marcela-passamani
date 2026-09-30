@@ -308,6 +308,7 @@ function renderDashboard(state) {
 
   renderRankingTable(state.candidatosCLDF);
   renderRegionalList(cand.votosPorZona);
+  renderSaoSebastiaoPanel(state.saoSebastiao);
   renderZabbixZones();
   renderZabbixTriggers(state.telemetria.alertasZabbix);
   renderServerList(state.telemetria.servidoresMonitorados);
@@ -355,6 +356,47 @@ function renderRegionalList(votosPorZona) {
       <span class="regional-name">${regiao}</span>
       <span class="regional-votes font-mono">${votos.toLocaleString('pt-BR')} votos</span>
     </div>
+  `).join('');
+}
+
+function renderSaoSebastiaoPanel(saoSebastiao) {
+  const summary = document.getElementById('saoSebastiaoSummary');
+  const list = document.getElementById('saoSebastiaoList');
+
+  if (!summary || !list) return;
+
+  if (!saoSebastiao || !Array.isArray(saoSebastiao.colegios)) {
+    summary.innerHTML = '<div class="sao-sebastiao-no-data">Dados de São Sebastião indisponíveis no momento.</div>';
+    list.innerHTML = '';
+    return;
+  }
+
+  const totalVotos = Number(saoSebastiao.totalVotos || 0);
+  const percentual = Number(saoSebastiao.percentualDoDf || 0);
+
+  summary.innerHTML = `
+    <div class="sao-sebastiao-summary-main">
+      <span class="sao-sebastiao-pill">TOTAL EM SÃO SEBASTIÃO</span>
+      <div class="sao-sebastiao-total font-mono">${totalVotos.toLocaleString('pt-BR')} votos</div>
+      <div class="sao-sebastiao-meta">${percentual.toFixed(1)}% do total geral da Marcela no DF</div>
+    </div>
+  `;
+
+  list.innerHTML = saoSebastiao.colegios.map((colegio) => `
+    <details class="sao-sebastiao-school" open>
+      <summary>
+        <span>${colegio.nome}</span>
+        <strong>${Number(colegio.totalColegio || 0).toLocaleString('pt-BR')} votos</strong>
+      </summary>
+      <ul class="sao-sebastiao-secoes">
+        ${colegio.secoes.map((secao) => `
+          <li>
+            <span>Seção ${secao.secao}</span>
+            <strong>${Number(secao.votos || 0).toLocaleString('pt-BR')} votos</strong>
+          </li>
+        `).join('')}
+      </ul>
+    </details>
   `).join('');
 }
 

@@ -68,6 +68,50 @@ const ELECTION_STATE = {
       'Gama (5ª ZE)': 649,
       'Sobradinho e Planaltina (6ª e 7ª ZE)': 487,
       'Samambaia e Recanto das Emas (13ª e 15ª ZE)': 406
+    },
+    saoSebastiao: {
+      totalVotos: 820,
+      percentualDoDf: 10.1,
+      colegios: [
+        {
+          codigo_local: '1015',
+          nome: 'CEF Centauro',
+          totalColegio: 212,
+          secoes: [
+            { secao: '0012', votos: 62 },
+            { secao: '0013', votos: 70 },
+            { secao: '0014', votos: 80 }
+          ]
+        },
+        {
+          codigo_local: '1023',
+          nome: 'EC Agrovila São José',
+          totalColegio: 196,
+          secoes: [
+            { secao: '0020', votos: 96 },
+            { secao: '0021', votos: 100 }
+          ]
+        },
+        {
+          codigo_local: '1040',
+          nome: 'Centro Educacional São Sebastião (CESS)',
+          totalColegio: 238,
+          secoes: [
+            { secao: '0030', votos: 74 },
+            { secao: '0031', votos: 82 },
+            { secao: '0032', votos: 82 }
+          ]
+        },
+        {
+          codigo_local: '1058',
+          nome: 'EC 01 de São Sebastião',
+          totalColegio: 174,
+          secoes: [
+            { secao: '0040', votos: 82 },
+            { secao: '0041', votos: 92 }
+          ]
+        }
+      ]
     }
   },
 
@@ -343,6 +387,50 @@ async function consultarCDNDoTSE() {
   }
 }
 
+function atualizarDadosSaoSebastiao(votosMarcelaAtual) {
+  const totalVotosSaoSebastiao = Math.max(0, Math.round(votosMarcelaAtual * 0.101));
+  const colegiosBase = [
+    { codigo_local: '1015', nome: 'CEF Centauro', pesos: [0.31, 0.34, 0.35], secoes: ['0012', '0013', '0014'] },
+    { codigo_local: '1023', nome: 'EC Agrovila São José', pesos: [0.49, 0.51], secoes: ['0020', '0021'] },
+    { codigo_local: '1040', nome: 'Centro Educacional São Sebastião (CESS)', pesos: [0.31, 0.34, 0.35], secoes: ['0030', '0031', '0032'] },
+    { codigo_local: '1058', nome: 'EC 01 de São Sebastião', pesos: [0.47, 0.53], secoes: ['0040', '0041'] }
+  ];
+
+  const colegios = colegiosBase.map((colegio) => {
+    const secoes = colegio.secoes.map((secao, idx) => {
+      const votos = Math.max(0, Math.round((totalVotosSaoSebastiao * colegio.pesos[idx]) / colegio.pesos.reduce((sum, peso) => sum + peso, 0)));
+      return { secao, votos };
+    });
+
+    const totalColegio = secoes.reduce((sum, secao) => sum + secao.votos, 0);
+    return {
+      codigo_local: colegio.codigo_local,
+      nome: colegio.nome,
+      totalColegio,
+      secoes
+    };
+  });
+
+  let totalColegioAjustado = 0;
+  colegios.forEach((colegio) => {
+    totalColegioAjustado += colegio.totalColegio;
+  });
+
+  const diferenca = totalVotosSaoSebastiao - totalColegioAjustado;
+  if (Math.abs(diferenca) > 0 && colegios.length) {
+    colegios[0].secoes[0].votos += diferenca;
+    colegios[0].totalColegio += diferenca;
+  }
+
+  const totalGeral = ELECTION_STATE.candidata?.votos ?? votosMarcelaAtual;
+  ELECTION_STATE.candidata.votosPorZona['São Sebastião e Santa Maria (18ª ZE)'] = totalVotosSaoSebastiao;
+  ELECTION_STATE.saoSebastiao = {
+    totalVotos: totalVotosSaoSebastiao,
+    percentualDoDf: totalGeral > 0 ? parseFloat(((totalVotosSaoSebastiao / totalGeral) * 100).toFixed(1)) : 0,
+    colegios
+  };
+}
+
 // Recalcular simulação
 function recalcularEleicao(pctApurado) {
   pctApurado = Math.min(100, Math.max(0, pctApurado));
@@ -378,7 +466,9 @@ function recalcularEleicao(pctApurado) {
     ELECTION_STATE.candidata.votosPorZona[regiao] = Math.round(votosAtuaisMarcela * pesosRegiao[regiao]);
   }
 
-  const multiplicadores = [1.22, 1.12, 1.00, 0.94, 0.91, 0.87, 0.82, 0.79, 0.77, 0.75, 0.73, 0.71, 0.69, 0.67, 0.65, 0.63, 0.61, 0.60, 0.58, 0.57, 0.55, 0.54, 0.52, 0.50];
+    atualizarDadosSaoSebastiao(votosAtuaisMarcela);
+
+    const multiplicadores = [1.22, 1.12, 1.00, 0.94, 0.91, 0.87, 0.82, 0.79, 0.77, 0.75, 0.73, 0.71, 0.69, 0.67, 0.65, 0.63, 0.61, 0.60, 0.58, 0.57, 0.55, 0.54, 0.52, 0.50];
   
   ELECTION_STATE.candidatosCLDF = ELECTION_STATE.candidatosCLDF.map((cand, idx) => {
     let votosCand = cand.destaque ? votosAtuaisMarcela : Math.round(votosAtuaisMarcela * (multiplicadores[idx] || 0.5));
