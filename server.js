@@ -45,6 +45,7 @@ const ELECTION_STATE = {
   ultimaAtualizacao: new Date().toISOString(),
   intervaloAtualizacaoMinutos: 15,
   modoFonte: 'tse_oficial', // 'tse_oficial' | 'simulado'
+  tseEndpointUrl: 'https://resultados.tse.jus.br/oficial/ele2026/600/dados-simplificados/df/df-c0007-e000600-r.json',
   statusConexaoTSE: 'CONECTADO_CDN_TSE',
   
   // Cache HTTP da CDN do TSE
@@ -150,6 +151,27 @@ const ELECTION_STATE = {
 // =======================================================
 // 1. AUTO-DESCOBERTA DO CÓDIGO DA ELEIÇÃO (ele-c.json)
 // =======================================================
+function normalizarCodigoEleicaoTSE(rawCodigo) {
+  if (!rawCodigo && rawCodigo !== 0) return String(ELECTION_STATE.idEleicao || '021272');
+  const codigo = String(rawCodigo).replace(/\D+/g, '');
+  return codigo || String(ELECTION_STATE.idEleicao || '021272');
+}
+
+function montarUrlsOficiaisTSE(codigoEleicao) {
+  const numero = normalizarCodigoEleicaoTSE(codigoEleicao);
+  const base = `https://resultados.tse.jus.br/oficial/${ELECTION_STATE.anoEleicao}`;
+  const comZeros = String(numero).padStart(6, '0');
+
+  return [
+    `${base}/${numero}/dados/df/df-c0007-e${comZeros}-u.json`,
+    `${base}/${numero}/dados/df/df-c0007-e${numero}-u.json`,
+    `${base}/${numero}/dados-simplificados/df/df-c0007-e${comZeros}-r.json`,
+    `${base}/${numero}/dados-simplificados/df/df-c0007-e${numero}-r.json`,
+    `${base}/${numero}/dados/df/df-c0007-e${comZeros}.json`,
+    `${base}/${numero}/dados/df/df-c0007-e${numero}.json`
+  ];
+}
+
 async function descobrirCodigoEleicaoTSE() {
   const urlConfigGlobal = `https://resultados.tse.jus.br/oficial/${ELECTION_STATE.anoEleicao}/comum/config/ele-c.json`;
   try {
@@ -158,19 +180,32 @@ async function descobrirCodigoEleicaoTSE() {
     });
     if (res.ok) {
       const data = await res.json();
-      // Procura pleito ordinário 1º turno DF estadual/distrital
+      const candidatos = [];
+
       if (Array.isArray(data.pl)) {
         for (const pleito of data.pl) {
           if (Array.isArray(pleito.e)) {
             for (const eleicao of pleito.e) {
-              if (eleicao.t === '1' && (eleicao.cdabr === 'DF' || eleicao.tpabr === 'UF' || eleicao.nm?.includes('Ordinária'))) {
-                ELECTION_STATE.idEleicao = eleicao.cd;
-                console.log(`[TSE AUTO-CONFIG] ID da Eleição identificado: ${ELECTION_STATE.idEleicao}`);
-                return eleicao.cd;
-              }
+              candidatos.push(eleicao);
             }
           }
         }
+      }
+
+      const encontrado = candidatos.find((eleicao) => {
+        const nome = String(eleicao.nm || '').toUpperCase();
+        const cdabr = String(eleicao.cdabr || '').toUpperCase();
+        const tpabr = String(eleicao.tpabr || '').toUpperCase();
+        const tipo = String(eleicao.t || '');
+        const eUF = cdabr === 'DF' || tpabr === 'UF' || nome.includes('DISTRITO FEDERAL') || nome.includes('DF');
+        return tipo === '1' && eUF;
+      }) || candidatos.find((eleicao) => String(eleicao.t || '') === '1');
+
+      if (encontrado) {
+        const codigo = normalizarCodigoEleicaoTSE(encontrado.cd);
+        ELECTION_STATE.idEleicao = codigo;
+        console.log(`[TSE AUTO-CONFIG] ID da Eleição identificado: ${ELECTION_STATE.idEleicao}`);
+        return codigo;
       }
     }
   } catch (err) {
@@ -253,6 +288,7 @@ function processarPayloadOficialTSE(tseData) {
         ELECTION_STATE.candidata.votos = marcela.votos;
         ELECTION_STATE.candidata.percentualValidos = marcela.percentual;
         ELECTION_STATE.candidata.posicaoRanking = marcela.rank;
+        atualizarDadosSaoSebastiao(marcela.votos);
 
         const isEleitaTSE = marcela.status.toUpperCase().includes('ELEITO') || 
                             marcela.status.toUpperCase().includes('ELEITA') || 
@@ -290,17 +326,14 @@ function processarPayloadOficialTSE(tseData) {
   }
 }
 
-// =======================================================
-// 3. CONSULTA HTTP DIRETA À CDN DO TSE (com ETag e If-Modified-Since)
-// =======================================================
-async function consultarCDNDoTSE() {
+async function consultarEndpointCustomizadoTSE(urlConfigurado) {
   const startTime = Date.now();
-  const idEleicao = ELECTION_STATE.idEleicao;
-  
-  // URL primária do padrão oficial EA20 (-u.json)
-  const urlTotalizacao = `https://resultados.tse.jus.br/oficial/${ELECTION_STATE.anoEleicao}/${idEleicao}/dados/df/df-c0007-e${idEleicao}-u.json`;
-  
-  // Headers com If-None-Match e If-Modified-Since para respeitar cache da CDN
+  const urlTotalizacao = String(urlConfigurado || '').trim();
+
+  if (!urlTotalizacao) {
+    return { ok: false, error: 'URL do endpoint TSE não configurada.' };
+  }
+
   const reqHeaders = {
     'User-Agent': 'PainelEleicoesWarRoom/2.0 (Marcela Passamani 15555 MDB; TSE Monitor)',
     'Accept': 'application/json, text/plain, */*',
@@ -309,18 +342,9 @@ async function consultarCDNDoTSE() {
     'Referer': 'https://resultados.tse.jus.br/'
   };
 
-  if (ELECTION_STATE.tseCache.lastEtag) {
-    reqHeaders['If-None-Match'] = ELECTION_STATE.tseCache.lastEtag;
-  }
-  if (ELECTION_STATE.tseCache.lastModified) {
-    reqHeaders['If-Modified-Since'] = ELECTION_STATE.tseCache.lastModified;
-  }
-
   try {
-    console.log(`[TSE CDN POLLER] Requisitando: ${urlTotalizacao}`);
-    
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 9000);
+    const timeoutId = setTimeout(() => controller.abort(), 12000);
 
     const res = await fetch(urlTotalizacao, {
       signal: controller.signal,
@@ -332,37 +356,117 @@ async function consultarCDNDoTSE() {
     ELECTION_STATE.telemetria.tsePingMs = latency;
     ELECTION_STATE.tseCache.httpStatus = res.status;
 
-    if (res.status === 304) {
-      console.log(`[TSE CDN] 304 Not Modified: Conteúdo inalterado no cache do TSE.`);
-      return { ok: true, status: 304, message: 'Dados inalterados (Cache TSE válido)' };
-    }
-
     if (res.ok) {
       ELECTION_STATE.tseCache.lastEtag = res.headers.get('ETag');
       ELECTION_STATE.tseCache.lastModified = res.headers.get('Last-Modified');
-
       const json = await res.json();
       ELECTION_STATE.telemetria.ultimoPayloadTseBytes = JSON.stringify(json).length;
       processarPayloadOficialTSE(json);
-      
       ELECTION_STATE.telemetria.alertasZabbix.unshift({
-        id: `TSE-${Date.now()}`,
+        id: `TSE-CUSTOM-${Date.now()}`,
         nivel: 'INFO',
-        mensagem: `Dados recebidos da CDN do TSE com sucesso (${latency}ms).`,
+        mensagem: `Dados recebidos do endpoint TSE configurado (${latency}ms).`,
         hora: new Date().toLocaleTimeString('pt-BR')
       });
-      return { ok: true, direct: true, data: json };
-    } else {
-      console.log(`[TSE CDN] Resposta HTTP ${res.status}. Aguardando início oficial da totalização.`);
-      ELECTION_STATE.statusConexaoTSE = `CONEXAO_ESTABELECIDA_STATUS_${res.status}`;
-      return { ok: false, status: res.status };
+      return { ok: true, direct: true, data: json, url: urlTotalizacao };
     }
+
+    return { ok: false, error: `HTTP ${res.status} ao consultar endpoint TSE configurado`, url: urlTotalizacao };
   } catch (err) {
     const latency = Date.now() - startTime;
     ELECTION_STATE.telemetria.tsePingMs = latency;
-    console.log(`[TSE CDN INFO] Requisição (${latency}ms): ${err.message}`);
-    return { ok: false, error: err.message };
+    return { ok: false, error: err.message, url: urlTotalizacao };
   }
+}
+
+async function consultarFonteConfiguradaTSE() {
+  if (ELECTION_STATE.modoFonte === 'simulado') {
+    const url = ELECTION_STATE.tseEndpointUrl || 'https://resultados-sim.tse.jus.br/simulado/simulado2026/ele2026/21270/dados/br/br-e021270-ab.json';
+    ELECTION_STATE.tseEndpointUrl = url;
+    return consultarEndpointCustomizadoTSE(url);
+  }
+
+  return consultarCDNDoTSE();
+}
+
+// =======================================================
+// 3. CONSULTA HTTP DIRETA À CDN DO TSE (com ETag e If-Modified-Since)
+// =======================================================
+async function consultarCDNDoTSE() {
+  const startTime = Date.now();
+  const idEleicao = normalizarCodigoEleicaoTSE(ELECTION_STATE.idEleicao);
+  const urls = montarUrlsOficiaisTSE(idEleicao);
+
+  let lastError = null;
+
+  for (const urlTotalizacao of urls) {
+    const reqHeaders = {
+      'User-Agent': 'PainelEleicoesWarRoom/2.0 (Marcela Passamani 15555 MDB; TSE Monitor)',
+      'Accept': 'application/json, text/plain, */*',
+      'Accept-Language': 'pt-BR,pt;q=0.9',
+      'Origin': 'https://resultados.tse.jus.br',
+      'Referer': 'https://resultados.tse.jus.br/'
+    };
+
+    if (ELECTION_STATE.tseCache.lastEtag) {
+      reqHeaders['If-None-Match'] = ELECTION_STATE.tseCache.lastEtag;
+    }
+    if (ELECTION_STATE.tseCache.lastModified) {
+      reqHeaders['If-Modified-Since'] = ELECTION_STATE.tseCache.lastModified;
+    }
+
+    try {
+      console.log(`[TSE CDN POLLER] Requisitando: ${urlTotalizacao}`);
+
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 9000);
+
+      const res = await fetch(urlTotalizacao, {
+        signal: controller.signal,
+        headers: reqHeaders
+      });
+
+      clearTimeout(timeoutId);
+      const latency = Date.now() - startTime;
+      ELECTION_STATE.telemetria.tsePingMs = latency;
+      ELECTION_STATE.tseCache.httpStatus = res.status;
+
+      if (res.status === 304) {
+        console.log(`[TSE CDN] 304 Not Modified: Conteúdo inalterado no cache do TSE.`);
+        return { ok: true, status: 304, message: 'Dados inalterados (Cache TSE válido)' };
+      }
+
+      if (res.ok) {
+        ELECTION_STATE.tseCache.lastEtag = res.headers.get('ETag');
+        ELECTION_STATE.tseCache.lastModified = res.headers.get('Last-Modified');
+
+        const json = await res.json();
+        ELECTION_STATE.telemetria.ultimoPayloadTseBytes = JSON.stringify(json).length;
+        processarPayloadOficialTSE(json);
+
+        ELECTION_STATE.telemetria.alertasZabbix.unshift({
+          id: `TSE-${Date.now()}`,
+          nivel: 'INFO',
+          mensagem: `Dados recebidos da CDN do TSE com sucesso (${latency}ms).`,
+          hora: new Date().toLocaleTimeString('pt-BR')
+        });
+        return { ok: true, direct: true, data: json, url: urlTotalizacao };
+      }
+
+      if (res.status !== 404) {
+        console.log(`[TSE CDN] Resposta HTTP ${res.status} em ${urlTotalizacao}. Tentando próxima URL do TSE.`);
+      }
+      lastError = new Error(`HTTP ${res.status}`);
+    } catch (err) {
+      const latency = Date.now() - startTime;
+      ELECTION_STATE.telemetria.tsePingMs = latency;
+      console.log(`[TSE CDN INFO] Requisição (${latency}ms) para ${urlTotalizacao}: ${err.message}`);
+      lastError = err;
+    }
+  }
+
+  ELECTION_STATE.statusConexaoTSE = `CONEXAO_ESTABELECIDA_STATUS_404_OU_FALHA`;
+  return { ok: false, error: lastError ? lastError.message : 'Nenhuma URL oficial do TSE respondeu com sucesso', urls };
 }
 
 function atualizarDadosSaoSebastiao(votosMarcelaAtual) {
@@ -372,17 +476,21 @@ function atualizarDadosSaoSebastiao(votosMarcelaAtual) {
   const colegios = SAO_SEBASTIAO_LOCALS.map((local, index) => {
     const share = shares[index] ?? 0.02;
     const totalColegio = Math.max(0, Math.round(totalVotosSaoSebastiao * share));
-    const secoes = local.secoes.map((secao, secaoIndex) => {
-      const base = secaoIndex === 0 && local.secoes.length > 1
-        ? totalColegio - Math.floor(totalColegio * (local.secoes.length - 1) / local.secoes.length)
-        : Math.floor(totalColegio / local.secoes.length);
-      return { secao, votos: Math.max(0, base) };
+    const secoes = [];
+    let restante = totalColegio;
+
+    local.secoes.forEach((secao, secaoIndex) => {
+      const base = local.secoes.length > 1
+        ? (secaoIndex === local.secoes.length - 1 ? restante : Math.floor(totalColegio / local.secoes.length))
+        : totalColegio;
+      const votosSecao = Math.max(0, base);
+      secoes.push({ secao, votos: votosSecao });
+      restante = Math.max(0, restante - votosSecao);
     });
 
-    const totalCalculado = secoes.reduce((sum, secao) => sum + secao.votos, 0);
-    const diff = totalColegio - totalCalculado;
-    if (diff !== 0 && secoes.length > 0) {
-      secoes[0].votos += diff;
+    const totalColegioAjustado = secoes.reduce((sum, secao) => sum + secao.votos, 0);
+    if (totalColegioAjustado !== totalColegio && secoes.length > 0) {
+      secoes[0].votos += totalColegio - totalColegioAjustado;
     }
 
     return {
@@ -395,7 +503,7 @@ function atualizarDadosSaoSebastiao(votosMarcelaAtual) {
 
   const totalColegioAjustado = colegios.reduce((sum, colegio) => sum + colegio.totalColegio, 0);
   const diferenca = totalVotosSaoSebastiao - totalColegioAjustado;
-  if (Math.abs(diferenca) > 0 && colegios.length) {
+  if (Math.abs(diferenca) > 0 && colegios.length && colegios[0].secoes.length > 0) {
     colegios[0].secoes[0].votos += diferenca;
     colegios[0].totalColegio += diferenca;
   }
@@ -524,8 +632,10 @@ recalcularEleicao(25);
 // 4. CICLO DE POLLING A CADA 30 MINUTOS (OU PERSONALIZADO)
 // =======================================================
 let pollerInterval = setInterval(async () => {
-  console.log(`[WAR ROOM AUTO-POLLER] Executando consulta periódica à CDN do TSE (a cada 15 min)...`);
-  if (ELECTION_STATE.modoFonte === 'tse_oficial') {
+  console.log(`[WAR ROOM AUTO-POLLER] Executando consulta periódica ao endpoint TSE configurado (a cada 15 min)...`);
+  if (ELECTION_STATE.modoFonte === 'simulado' && ELECTION_STATE.tseEndpointUrl) {
+    await consultarEndpointCustomizadoTSE(ELECTION_STATE.tseEndpointUrl);
+  } else if (ELECTION_STATE.modoFonte === 'tse_oficial') {
     await consultarCDNDoTSE();
   }
 }, 15 * 60 * 1000);
@@ -542,7 +652,7 @@ app.get('/api/apuracao', async (req, res) => {
 
 // Sincronização direta sob demanda
 app.post('/api/tse/sync-direto', async (req, res) => {
-  const result = await consultarCDNDoTSE();
+const result = await consultarFonteConfiguradaTSE();
   res.json({
     success: true,
     result: result,
@@ -599,21 +709,27 @@ app.post('/api/apuracao/reset', (req, res) => {
 
 // Configurações
 app.post('/api/config', (req, res) => {
-  const { intervaloMinutos, modoFonte, idEleicao, anoEleicao } = req.body;
+const { intervaloMinutos, modoFonte, idEleicao, anoEleicao, tseEndpointUrl } = req.body;
   if (intervaloMinutos) {
     ELECTION_STATE.intervaloAtualizacaoMinutos = parseFloat(intervaloMinutos);
     clearInterval(pollerInterval);
     pollerInterval = setInterval(async () => {
       if (ELECTION_STATE.modoFonte === 'tse_oficial') {
         await consultarCDNDoTSE();
-      }
-    }, ELECTION_STATE.intervaloAtualizacaoMinutos * 60 * 1000);
-  }
-  if (modoFonte) ELECTION_STATE.modoFonte = modoFonte;
-  if (idEleicao) ELECTION_STATE.idEleicao = idEleicao;
-  if (anoEleicao) ELECTION_STATE.anoEleicao = anoEleicao;
+    } else if (ELECTION_STATE.tseEndpointUrl) {
+      await consultarEndpointCustomizadoTSE(ELECTION_STATE.tseEndpointUrl);
+    }
+  }, ELECTION_STATE.intervaloAtualizacaoMinutos * 60 * 1000);
+}
+if (modoFonte) ELECTION_STATE.modoFonte = modoFonte;
+if (idEleicao) ELECTION_STATE.idEleicao = idEleicao;
+if (anoEleicao) ELECTION_STATE.anoEleicao = anoEleicao;
+if (tseEndpointUrl) ELECTION_STATE.tseEndpointUrl = tseEndpointUrl;
+if (ELECTION_STATE.modoFonte === 'simulado' && !ELECTION_STATE.tseEndpointUrl) {
+  ELECTION_STATE.tseEndpointUrl = 'https://resultados-sim.tse.jus.br/simulado/simulado2026/ele2026/21270/dados/br/br-e021270-ab.json';
+}
   
-  res.json({ success: true, message: 'Configurações de CDN do TSE atualizadas', data: ELECTION_STATE });
+res.json({ success: true, message: 'Configurações de CDN do TSE atualizadas', data: ELECTION_STATE });
 });
 
 // Zabbix Metrics Endpoint
