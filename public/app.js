@@ -398,6 +398,10 @@ function renderSaoSebastiaoPanel(saoSebastiao) {
       </ul>
     </details>
   `).join('');
+
+  if (window.lucide) {
+    window.lucide.createIcons();
+  }
 }
 
 function renderZabbixZones() {
