@@ -21,7 +21,10 @@ const SAO_SEBASTIAO_LOCALS = [
   { codigo_local: '1101', nome: 'Área Rural - Comunidade de Santa Luzia', secoes: ['0090', '0091', '0092', '0093'] },
   { codigo_local: '1110', nome: 'Área Rural - Setor Agropecuário de São Sebastião', secoes: ['0100', '0101', '0102', '0103', '0104'] },
   { codigo_local: '1122', nome: 'Agrovila São Pedro / Povoado do Cruzeiro', secoes: ['0110', '0111', '0112', '0113'] },
-  { codigo_local: '1135', nome: 'Assentamento e Fazendas da Região Rural', secoes: ['0120', '0121', '0122', '0123', '0124'] }
+  { codigo_local: '1135', nome: 'Assentamento e Fazendas da Região Rural', secoes: ['0120', '0121', '0122', '0123', '0124'] },
+  { codigo_local: '1143', nome: 'Área Rural - Povoado do Ribeirão', secoes: ['0130', '0131', '0132', '0133'] },
+  { codigo_local: '1156', nome: 'Área Rural - Vargem Grande / Fazenda Primavera', secoes: ['0140', '0141', '0142', '0143', '0144'] },
+  { codigo_local: '1168', nome: 'Área Rural - Sítio Boa Vista e adjacências', secoes: ['0150', '0151', '0152', '0153'] }
 ];
 
 app.use(cors());
@@ -475,7 +478,7 @@ async function consultarCDNDoTSE() {
 
 function atualizarDadosSaoSebastiao(votosMarcelaAtual) {
   const totalVotosSaoSebastiao = Math.max(0, Math.round(votosMarcelaAtual * 0.101));
-  const shares = [0.22, 0.18, 0.12, 0.10, 0.08, 0.07, 0.06, 0.05, 0.05, 0.04, 0.02, 0.01];
+  const shares = [0.17, 0.14, 0.11, 0.09, 0.08, 0.07, 0.06, 0.05, 0.05, 0.04, 0.04, 0.03, 0.03, 0.02, 0.02];
 
   const colegios = SAO_SEBASTIAO_LOCALS.map((local, index) => {
     const share = shares[index] ?? 0.02;
