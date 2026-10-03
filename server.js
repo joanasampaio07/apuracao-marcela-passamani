@@ -10,21 +10,21 @@ const app = express();
 const DEFAULT_PORT = parseInt(process.env.PORT, 10) || 5555;
 
 const SAO_SEBASTIAO_LOCALS = [
-  { codigo_local: '1015', nome: 'CEF Centauro', secoes: ['0012', '0013', '0014', '0015'] },
-  { codigo_local: '1023', nome: 'EC Agrovila São José', secoes: ['0020', '0021', '0022', '0023'] },
-  { codigo_local: '1040', nome: 'Centro Educacional São Sebastião (CESS)', secoes: ['0030', '0031', '0032', '0033', '0034'] },
-  { codigo_local: '1058', nome: 'EC 01 de São Sebastião', secoes: ['0040', '0041', '0042', '0043'] },
-  { codigo_local: '1060', nome: 'CEI São Sebastião', secoes: ['0050', '0051', '0052'] },
-  { codigo_local: '1075', nome: 'Colégio Sagrado Coração', secoes: ['0060', '0061', '0062', '0063'] },
-  { codigo_local: '1082', nome: 'Escola de Educação Infantil Vila Nova', secoes: ['0070', '0071', '0072'] },
-  { codigo_local: '1098', nome: 'EMEF Leonardo da Vinci', secoes: ['0080', '0081', '0082', '0083'] },
-  { codigo_local: '1101', nome: 'Área Rural - Comunidade de Santa Luzia', secoes: ['0090', '0091', '0092', '0093'] },
-  { codigo_local: '1110', nome: 'Área Rural - Setor Agropecuário de São Sebastião', secoes: ['0100', '0101', '0102', '0103', '0104'] },
-  { codigo_local: '1122', nome: 'Agrovila São Pedro / Povoado do Cruzeiro', secoes: ['0110', '0111', '0112', '0113'] },
-  { codigo_local: '1135', nome: 'Assentamento e Fazendas da Região Rural', secoes: ['0120', '0121', '0122', '0123', '0124'] },
-  { codigo_local: '1143', nome: 'Área Rural - Povoado do Ribeirão', secoes: ['0130', '0131', '0132', '0133'] },
-  { codigo_local: '1156', nome: 'Área Rural - Vargem Grande / Fazenda Primavera', secoes: ['0140', '0141', '0142', '0143', '0144'] },
-  { codigo_local: '1168', nome: 'Área Rural - Sítio Boa Vista e adjacências', secoes: ['0150', '0151', '0152', '0153'] }
+  { codigo_local: '1015', nome: 'Centro Educacional São José', secoes: ['092', '093', '094', '095', '100', '101', '102', '103', '104', '317'] },
+  { codigo_local: '1023', nome: 'Centro Educacional São Bartolomeu', secoes: ['202', '209', '211', '216', '221', '224', '228', '231', '235', '240', '269', '276'] },
+  { codigo_local: '1040', nome: 'Colégio Modelo de São Sebastião', secoes: ['204', '223', '236', '256', '268', '281', '418'] },
+  { codigo_local: '1058', nome: 'Centro Educacional São Francisco - Chicão', secoes: ['264', '271', '286', '318', '353', '365', '384', '396', '401', '412'] },
+  { codigo_local: '1060', nome: 'Escola Classe Vila Nova', secoes: ['196', '213', '227', '245', '261', '280', '314', '377', '392', '398'] },
+  { codigo_local: '1075', nome: 'Escola Classe 104', secoes: ['130', '131', '132', '133', '134', '135', '136', '137', '138', '139'] },
+  { codigo_local: '1082', nome: 'Escola Classe Agrovilas', secoes: ['081', '082', '083', '084', '085', '086', '087', '088', '089', '307'] },
+  { codigo_local: '1098', nome: 'Centro de Ensino Fundamental do Bosque', secoes: ['182', '183', '184', '185', '186', '187', '188', '189', '190', '191'] },
+  { codigo_local: '1101', nome: 'Unidade de Internação de São Sebastião', secoes: ['419'] },
+  { codigo_local: '1110', nome: 'Centro de Ensino Médio 01 - Centro', secoes: ['105', '106', '107', '108', '109', '110', '111', '112', '113', '114'] },
+  { codigo_local: '1122', nome: 'Colégio Nossa Senhora do Perpétuo Socorro', secoes: ['161', '162', '163', '164', '165', '166', '167', '168', '169', '170'] },
+  { codigo_local: '1135', nome: 'Escola Classe 303', secoes: ['005', '074', '199', '217', '257', '270', '277', '294', '324', '350'] },
+  { codigo_local: '1143', nome: 'Centro Educacional do Lago Sul - CEL', secoes: ['010', '011', '012', '013', '014', '015', '016', '305', '321', '330'] },
+  { codigo_local: '1156', nome: 'Caic UNESCO', secoes: ['291', '302', '310', '322', '334', '345', '355', '359', '364', '370'] },
+  { codigo_local: '1168', nome: 'Escola das Nações', secoes: ['147', '148', '149', '150', '151', '152', '153', '154', '155', '156'] }
 ];
 
 app.use(cors());
