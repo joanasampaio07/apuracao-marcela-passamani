@@ -376,7 +376,7 @@ function renderSaoSebastiaoPanel(saoSebastiao) {
 
   summary.innerHTML = `
     <div class="sao-sebastiao-summary-main">
-      <span class="sao-sebastiao-pill">TOTAL EM SÃO SEBASTIÃO</span>
+      <span class="sao-sebastiao-pill">TOTAL EM SÃO SEBASTIÃO + ÁREA RURAL</span>
       <div class="sao-sebastiao-total font-mono">${totalVotos.toLocaleString('pt-BR')} votos</div>
       <div class="sao-sebastiao-meta">${percentual.toFixed(1)}% do total geral da Marcela no DF</div>
     </div>
@@ -420,7 +420,7 @@ function renderZabbixZones() {
     { num: '9ª ZE', loc: 'Guará I e II' },
     { num: '10ª ZE', loc: 'Núcleo Bandeirante' },
     { num: '11ª ZE', loc: 'Cruzeiro / Sudoeste' },
-    { num: '12ª ZE', loc: 'São Sebastião' },
+    { num: '12ª ZE', loc: 'São Sebastião / Área Rural' },
     { num: '13ª ZE', loc: 'Samambaia Norte' },
     { num: '14ª ZE', loc: 'Asa Norte / Lago Norte' },
     { num: '15ª ZE', loc: 'Recanto das Emas' },
