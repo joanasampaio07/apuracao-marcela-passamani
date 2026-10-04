@@ -6,12 +6,55 @@ let countdownInterval = null;
 let currentIntervalMinutes = 15;
 let soundEnabled = true;
 let hasPlayedVictoryFanfare = false;
+let monitorModeEnabled = false;
 
 // Instâncias dos Gráficos Chart.js
 let regionalChartInstance = null;
 let grafanaVotesRateChartInstance = null;
 let grafanaLatencyChartInstance = null;
 let grafanaVotesCompChartInstance = null;
+
+function setMonitorMode(enabled) {
+  monitorModeEnabled = enabled;
+  document.body.classList.toggle('monitor-mode', enabled);
+  const monitorButton = document.getElementById('btnMonitorMode');
+  if (monitorButton) {
+   monitorButton.classList.toggle('active', enabled);
+   monitorButton.textContent = enabled ? 'Modo Normal' : 'Modo Monitor';
+  }
+}
+
+async function toggleFullscreen() {
+  try {
+   if (!document.fullscreenElement) {
+     await document.documentElement.requestFullscreen();
+     document.body.classList.add('fullscreen-mode');
+   } else {
+     await document.exitFullscreen();
+     document.body.classList.remove('fullscreen-mode');
+   }
+  } catch (err) {
+   console.warn('Fullscreen não disponível:', err);
+  }
+}
+
+function updateFeedStatusBanner(state) {
+  const banner = document.getElementById('officialFeedBanner');
+  if (!banner) return;
+
+  const httpStatus = Number(state?.tseCache?.httpStatus || 0);
+  const statusText = String(state?.statusConexaoTSE || '').toUpperCase();
+  const waitingForOfficialFeed = state?.modoFonte === 'tse_oficial' && (httpStatus === 404 || statusText.includes('404') || !state?.tseCache?.ultimoTimestampTSE);
+
+  banner.hidden = !waitingForOfficialFeed;
+  const title = document.getElementById('officialFeedBannerTitle');
+  const text = document.getElementById('officialFeedBannerText');
+
+  if (waitingForOfficialFeed) {
+   title.innerText = 'Aguardando feed oficial do TSE';
+   text.innerText = 'O painel está pronto para receber e atualizar automaticamente quando a apuração oficial do DF for publicada.';
+  }
+}
 
 document.addEventListener('DOMContentLoaded', () => {
   const selectModoFonte = document.getElementById('selectModoFonte');
@@ -25,6 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.lucide.createIcons();
   }
 
+  setMonitorMode(false);
   setupTabs();
   setupEventListeners();
   initCharts();
@@ -61,11 +105,24 @@ function setupTabs() {
 
 // Configuração de Event Listeners
 function setupEventListeners() {
-  // Botão Atualizar Manual
-  document.getElementById('btnManualRefresh').addEventListener('click', () => {
-    fetchApuracaoData(true);
-    resetCountdown();
-  });
+  const btnManualRefresh = document.getElementById('btnManualRefresh');
+  if (btnManualRefresh) {
+    btnManualRefresh.addEventListener('click', () => {
+      fetchApuracaoData(true);
+      resetCountdown();
+    });
+  }
+
+  // Modo monitor / tela cheia
+  const btnMonitorMode = document.getElementById('btnMonitorMode');
+  if (btnMonitorMode) {
+    btnMonitorMode.addEventListener('click', () => setMonitorMode(!monitorModeEnabled));
+  }
+
+  const btnFullscreen = document.getElementById('btnFullscreen');
+  if (btnFullscreen) {
+    btnFullscreen.addEventListener('click', toggleFullscreen);
+  }
 
   // Botão Sincronizar Direto do TSE
   const btnSyncTse = document.getElementById('btnSyncTseNow');
@@ -85,6 +142,21 @@ function setupEventListeners() {
       } finally {
         btnSyncTse.innerHTML = '<i data-lucide="refresh-cw"></i> Forçar Leitura Imediata Direto do TSE';
         if (window.lucide) window.lucide.createIcons();
+      }
+    });
+  }
+
+  const btnSyncTseBanner = document.getElementById('btnSyncTseNowBanner');
+  if (btnSyncTseBanner) {
+    btnSyncTseBanner.addEventListener('click', async () => {
+      try {
+        const res = await fetch('/api/tse/sync-direto', { method: 'POST' });
+        const data = await res.json();
+        if (data.success) {
+          renderDashboard(data.data);
+        }
+      } catch (err) {
+        console.error('Erro ao verificar TSE manualmente:', err);
       }
     });
   }
@@ -304,6 +376,8 @@ function renderDashboard(state) {
   document.getElementById('statSecoesApuradas').innerText = state.secoesApuradas.toLocaleString('pt-BR');
   document.getElementById('statVotosValidos').innerText = state.totalVotosValidos.toLocaleString('pt-BR');
   document.getElementById('statQuociente').innerText = state.quocienteEleitoralEstimado.toLocaleString('pt-BR');
+
+  updateFeedStatusBanner(state);
 
   // Slider
   const slider = document.getElementById('sliderApuracao');

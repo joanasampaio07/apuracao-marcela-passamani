@@ -39,6 +39,11 @@
       </div>
 
       <div class="nav-right">
+        <div class="nav-tools">
+          <button id="btnMonitorMode" class="btn-toggle" type="button">Modo Monitor</button>
+          <button id="btnFullscreen" class="btn-toggle btn-toggle-dark" type="button">Tela Cheia</button>
+        </div>
+
         <!-- Indicadores de Monitoramento Zabbix & Grafana -->
         <div class="system-pills">
           <div class="pill zabbix-pill" title="Status do Zabbix Agent v7.0">
@@ -75,8 +80,16 @@
 
   <!-- Container Principal -->
   <main class="container main-content">
-    
-    <!-- BANNER HERO: CANDIDATA MARCELA PASSAMANI 15555 MDB -->
+    <div id="officialFeedBanner" class="official-feed-banner" hidden>
+      <div class="banner-icon">📡</div>
+      <div class="banner-copy">
+        <div class="banner-title" id="officialFeedBannerTitle">Aguardando feed oficial do TSE</div>
+        <div class="banner-text" id="officialFeedBannerText">O painel está pronto para receber e atualizar automaticamente quando a apuração oficial do DF for publicada.</div>
+      </div>
+      <button id="btnSyncTseNowBanner" class="banner-action" type="button">Verificar agora</button>
+    </div>
+     
+   <!-- BANNER HERO: CANDIDATA MARCELA PASSAMANI 15555 MDB -->
     <section class="candidate-hero-card" id="candidateHeroCard">
       <div class="hero-left">
         <div class="portrait-wrapper">
