@@ -634,6 +634,8 @@ function recalcularEleicao(pctApurado) {
 }
 
 recalcularEleicao(25);
+ELECTION_STATE.modoFonte = 'tse_oficial';
+ELECTION_STATE.tseEndpointUrl = 'https://resultados.tse.jus.br/oficial/ele2026/600/dados-simplificados/df/df-c0007-e000600-r.json';
 
 // =======================================================
 // 4. CICLO DE POLLING A CADA 30 MINUTOS (OU PERSONALIZADO)
@@ -646,6 +648,13 @@ let pollerInterval = setInterval(async () => {
     await consultarCDNDoTSE();
   }
 }, 15 * 60 * 1000);
+
+setTimeout(async () => {
+  if (ELECTION_STATE.modoFonte === 'tse_oficial') {
+    console.log('[WAR ROOM AUTO-POLLER] Primeira leitura oficial do TSE em andamento...');
+    await consultarCDNDoTSE();
+  }
+}, 4000);
 
 // =======================================================
 // 5. ROTAS DA API REST

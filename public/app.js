@@ -14,6 +14,13 @@ let grafanaLatencyChartInstance = null;
 let grafanaVotesCompChartInstance = null;
 
 document.addEventListener('DOMContentLoaded', () => {
+  const selectModoFonte = document.getElementById('selectModoFonte');
+  const inputTseUrl = document.getElementById('inputTseUrl');
+  const defaultTseUrl = 'https://resultados.tse.jus.br/oficial/ele2026/600/dados-simplificados/df/df-c0007-e000600-r.json';
+
+  if (selectModoFonte) selectModoFonte.value = 'tse_oficial';
+  if (inputTseUrl) inputTseUrl.value = defaultTseUrl;
+
   if (window.lucide) {
     window.lucide.createIcons();
   }
