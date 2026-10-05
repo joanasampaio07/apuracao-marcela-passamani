@@ -59,7 +59,7 @@ function updateFeedStatusBanner(state) {
 document.addEventListener('DOMContentLoaded', () => {
   const selectModoFonte = document.getElementById('selectModoFonte');
   const inputTseUrl = document.getElementById('inputTseUrl');
-  const defaultTseUrl = 'https://resultados.tse.jus.br/oficial/ele2026/600/dados-simplificados/df/df-c0007-e000600-r.json';
+  const defaultTseUrl = 'https://resultados.tse.jus.br/oficial/ele2026/{ID_ELEICAO}/dados/df/df-c0007-e{ID_ELEICAO}-u.json';
 
   if (selectModoFonte) selectModoFonte.value = 'tse_oficial';
   if (inputTseUrl) inputTseUrl.value = defaultTseUrl;
@@ -110,6 +110,16 @@ function setupEventListeners() {
     btnManualRefresh.addEventListener('click', () => {
       fetchApuracaoData(true);
       resetCountdown();
+    });
+  }
+
+  const btnConsultarCesp = document.getElementById('btnConsultarCesp');
+  if (btnConsultarCesp) {
+    btnConsultarCesp.addEventListener('click', () => {
+      const municipio = document.getElementById('cespMunicipioInput')?.value || 'BRASILIA';
+      const zona = document.getElementById('cespZonaInput')?.value || '18';
+      const secao = document.getElementById('cespSecaoInput')?.value || '';
+      fetchCespData({ municipio, zona, secao });
     });
   }
 
@@ -285,6 +295,26 @@ function updateCountdownDisplay() {
 }
 
 // Busca de dados da API
+async function fetchCespData({ municipio = 'BRASILIA', zona = '18', secao = '' } = {}) {
+  try {
+    const params = new URLSearchParams({ municipio, zona });
+    if (secao) params.set('secao', secao);
+    const response = await fetch(`/api/tse/cesp?${params.toString()}`);
+    const json = await response.json();
+    if (json && json.success && json.data) {
+      if (appState) {
+        appState.cespOficial = json.data;
+      }
+      renderCespData(json.data);
+      return;
+    }
+  } catch (err) {
+    console.warn('Falha ao consultar CESP oficial do TSE:', err);
+  }
+
+  renderCespData({ success: false, rows: [], error: 'Dados do CESP indisponíveis.' });
+}
+
 async function fetchApuracaoData(isManual = false) {
   const refreshIcon = document.getElementById('refreshIcon');
   if (refreshIcon) refreshIcon.classList.add('spin-anim');
@@ -295,6 +325,23 @@ async function fetchApuracaoData(isManual = false) {
 
     if (json.success && json.data) {
       appState = json.data;
+
+      try {
+        const tseDetalhadoRes = await fetch('/api/tse/resultado-df');
+        const tseDetalhadoJson = await tseDetalhadoRes.json();
+        if (tseDetalhadoJson.success && tseDetalhadoJson.data) {
+          appState.tseDetalhado = tseDetalhadoJson.data;
+          appState.municipioTse = tseDetalhadoJson.data.municipios?.[0] || null;
+        }
+      } catch (err) {
+        console.warn('Falha ao consultar endpoint detalhado do TSE:', err);
+      }
+
+      await fetchCespData({
+        municipio: document.getElementById('cespMunicipioInput')?.value || 'BRASILIA',
+        zona: document.getElementById('cespZonaInput')?.value || '18',
+        secao: document.getElementById('cespSecaoInput')?.value || ''
+      });
       renderDashboard(appState);
       if (isManual && soundEnabled) {
         playBeep(880, 0.08);
@@ -390,6 +437,10 @@ function renderDashboard(state) {
   renderRankingTable(state.candidatosCLDF);
   renderRegionalList(cand.votosPorZona);
   renderSaoSebastiaoPanel(state.saoSebastiao);
+  renderZonePerformance(state);
+  if (state.cespOficial) {
+    renderCespData(state.cespOficial);
+  }
   renderZabbixZones();
   renderZabbixTriggers(state.telemetria.alertasZabbix);
   renderServerList(state.telemetria.servidoresMonitorados);
@@ -483,6 +534,95 @@ function renderSaoSebastiaoPanel(saoSebastiao) {
   if (window.lucide) {
     window.lucide.createIcons();
   }
+}
+
+function renderZonePerformance(state) {
+  const grid = document.getElementById('zonePerformanceGrid');
+  const list = document.getElementById('sectionPerformanceList');
+  if (!grid || !list) return;
+
+  const zonas = Object.entries(state?.candidata?.votosPorZona || {})
+    .map(([nome, votos]) => ({ nome, votos: Number(votos || 0) }))
+    .sort((a, b) => b.votos - a.votos);
+
+  const totalGeral = zonas.reduce((sum, zona) => sum + zona.votos, 0) || 1;
+  grid.innerHTML = zonas.map((zona, index) => {
+    const pct = (zona.votos / totalGeral) * 100;
+    return `
+      <div style="padding:12px; border-radius:12px; background: rgba(15,23,42,0.7); border:1px solid rgba(148,163,184,0.16);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px;">
+          <span style="font-size:0.72rem; letter-spacing:0.08em; text-transform:uppercase; color:#94a3b8;">#${index + 1}</span>
+          <span style="background: rgba(16,185,129,0.12); color:#a7f3d0; border:1px solid rgba(16,185,129,0.26); border-radius:999px; padding:3px 8px; font-size:0.7rem;">${pct.toFixed(1)}%</span>
+        </div>
+        <div style="font-weight:700; color:#f8fafc; margin-bottom:6px;">${zona.nome}</div>
+        <div class="font-mono" style="font-size:1.1rem; color:#10b981;">${zona.votos.toLocaleString('pt-BR')} votos</div>
+      </div>
+    `;
+  }).join('');
+
+  const secoes = [];
+  (state?.saoSebastiao?.colegios || []).forEach((colegio) => {
+    (colegio.secoes || []).forEach((secao) => {
+      secoes.push({
+        nome: `${colegio.nome} • Seção ${secao.secao}`,
+        votos: Number(secao.votos || 0)
+      });
+    });
+  });
+
+  const topSecoes = secoes.sort((a, b) => b.votos - a.votos).slice(0, 8);
+  list.innerHTML = topSecoes.map((secao, index) => `
+    <div style="display:flex; align-items:center; justify-content:space-between; gap: 10px; padding:10px 12px; background: rgba(15,23,42,0.72); border:1px solid rgba(148,163,184,0.14); border-radius:10px;">
+      <div>
+        <div style="font-size:0.7rem; letter-spacing:0.06em; color:#94a3b8; text-transform:uppercase;">#${index + 1}</div>
+        <div style="color:#f8fafc;">${secao.nome}</div>
+      </div>
+      <div class="font-mono" style="color:#38bdf8; font-size:1rem; font-weight:700;">${secao.votos.toLocaleString('pt-BR')}</div>
+    </div>
+  `).join('');
+}
+
+function renderCespData(data) {
+  const container = document.getElementById('cespOfficialInfo');
+  if (!container) return;
+
+  if (!data || !data.success || !Array.isArray(data.rows) || data.rows.length === 0) {
+    container.innerHTML = `
+      <div style="padding: 12px 14px; border-radius: 12px; background: rgba(148, 163, 184, 0.08); color: #cbd5e1; border: 1px solid rgba(148, 163, 184, 0.15);">
+        Base oficial CESP da 18ª ZE indisponível no momento. O painel local de São Sebastião e área rural continua em acompanhamento operativo.
+      </div>
+    `;
+    return;
+  }
+
+  const rows = data.rows.slice(0, 6);
+  const firstRow = rows[0] || {};
+
+  container.innerHTML = `
+    <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; padding: 12px 14px; border-radius: 12px; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); color: #d1fae5;">
+      <div>
+        <div style="font-size:0.72rem; letter-spacing:0.08em; text-transform:uppercase; color:#a7f3d0;">CESP • ${firstRow.NM_MUNICIPIO || 'BRASÍLIA'}</div>
+        <strong style="font-size:1.05rem;">${data.total ?? rows.length} registros</strong>
+      </div>
+      <div style="text-align:right; font-size:0.8rem; color:#cbd5e1;">
+        <div>Zona ${firstRow.NR_ZONA || '18'}</div>
+        <div>Origem: TSE/CDN oficial</div>
+      </div>
+    </div>
+    <div style="display:grid; gap: 8px;">
+      ${rows.map((row) => `
+        <div style="padding: 10px 12px; border-radius: 10px; background: rgba(15, 23, 42, 0.84); border: 1px solid rgba(148, 163, 184, 0.15);">
+          <div style="display:flex; justify-content:space-between; gap: 10px; align-items:center; flex-wrap:wrap;">
+            <strong style="color:#f8fafc;">Seção ${row.NR_SECAO || '—'}</strong>
+            <span style="font-size:0.75rem; color:#94a3b8;">Local ${row.NR_LOCAL_VOTACAO || '—'}</span>
+          </div>
+          <div style="margin-top:6px; font-size:0.78rem; color:#cbd5e1;">
+            Urna esperada: ${row.NR_URNA_ESPERADA || '—'} • Correspondência: ${row.ST_CORRESP_ALTERADA === 'N' ? 'Normal' : row.ST_CORRESP_ALTERADA || '—'}
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
 }
 
 function renderZabbixZones() {

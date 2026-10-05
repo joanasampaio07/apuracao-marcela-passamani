@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import path from 'path';
+import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -8,6 +9,8 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const DEFAULT_PORT = parseInt(process.env.PORT, 10) || 5555;
+const CESP_URL = 'https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2026/correspesp/CESP_1t_DF_041020261259.zip';
+const CESP_PARSER_PATH = path.join(__dirname, 'tse_cesp_parser.py');
 
 const SAO_SEBASTIAO_LOCALS = [
   { codigo_local: '1015', nome: 'Centro Educacional São José', secoes: ['092', '093', '094', '095', '100', '101', '102', '103', '104', '317'] },
@@ -52,7 +55,7 @@ const ELECTION_STATE = {
   ultimaAtualizacao: new Date().toISOString(),
   intervaloAtualizacaoMinutos: 15,
   modoFonte: 'tse_oficial', // 'tse_oficial' | 'simulado'
-  tseEndpointUrl: 'https://resultados.tse.jus.br/oficial/ele2026/600/dados-simplificados/df/df-c0007-e000600-r.json',
+  tseEndpointUrl: 'https://resultados.tse.jus.br/oficial/ele2026/021272/dados/df/df-c0007-e021272-u.json',
   statusConexaoTSE: 'CONECTADO_CDN_TSE',
   
   // Cache HTTP da CDN do TSE
@@ -155,6 +158,8 @@ const ELECTION_STATE = {
   }
 };
 
+ELECTION_STATE.tseEndpointUrl = obterUrlOficialPadraoTSE(ELECTION_STATE.idEleicao);
+
 // =======================================================
 // 1. AUTO-DESCOBERTA DO CÓDIGO DA ELEIÇÃO (ele-c.json)
 // =======================================================
@@ -177,6 +182,21 @@ function montarUrlsOficiaisTSE(codigoEleicao) {
     `${base}/${numero}/dados/df/df-c0007-e${comZeros}.json`,
     `${base}/${numero}/dados/df/df-c0007-e${numero}.json`
   ];
+}
+
+function obterUrlOficialPadraoTSE(codigoEleicao) {
+  const numero = normalizarCodigoEleicaoTSE(codigoEleicao);
+  return `https://resultados.tse.jus.br/oficial/${ELECTION_STATE.anoEleicao}/${numero}/dados/df/df-c0007-e${String(numero).padStart(6, '0')}-u.json`;
+}
+
+async function atualizarUrlOficialTsePadrao() {
+  const codigo = await descobrirCodigoEleicaoTSE();
+  if (codigo) {
+    ELECTION_STATE.idEleicao = normalizarCodigoEleicaoTSE(codigo);
+    ELECTION_STATE.tseEndpointUrl = obterUrlOficialPadraoTSE(ELECTION_STATE.idEleicao);
+    console.log(`[TSE AUTO-CONFIG] URL oficial padrão atualizada: ${ELECTION_STATE.tseEndpointUrl}`);
+  }
+  return ELECTION_STATE.tseEndpointUrl;
 }
 
 async function descobrirCodigoEleicaoTSE() {
@@ -331,6 +351,160 @@ function processarPayloadOficialTSE(tseData) {
     console.error('[TSE PARSER ERROR]:', err);
     return false;
   }
+}
+
+function executarParserCesp({ municipio = 'BRASILIA', zona = '18', secao = '' } = {}) {
+  return new Promise((resolve, reject) => {
+    const args = [
+      CESP_PARSER_PATH,
+      '--url',
+      CESP_URL,
+      '--municipio',
+      String(municipio || ''),
+      '--zona',
+      String(zona || ''),
+    ];
+
+    if (secao) {
+      args.push('--secao', String(secao));
+    }
+
+    const child = spawn('python', args, { cwd: __dirname });
+    let stdout = '';
+    let stderr = '';
+
+    child.stdout.on('data', (chunk) => {
+      stdout += chunk.toString();
+    });
+
+    child.stderr.on('data', (chunk) => {
+      stderr += chunk.toString();
+    });
+
+    child.on('close', (code) => {
+      if (code !== 0) {
+        reject(new Error(stderr || `Parser CESP falhou com código ${code}`));
+        return;
+      }
+
+      try {
+        resolve(JSON.parse(stdout));
+      } catch (err) {
+        reject(new Error(`Resposta inválida do parser CESP: ${err.message}`));
+      }
+    });
+  });
+}
+
+function montarDadosTseDetalhados() {
+  const ranking = (ELECTION_STATE.candidatosCLDF || []).map((candidato) => ({
+    rank: candidato.rank,
+    nome: candidato.nome,
+    numero: candidato.numero,
+    partido: candidato.partido,
+    votos: Number(candidato.votos || 0),
+    percentual: Number(candidato.percentual || 0),
+    status: candidato.status || 'Em Apuração',
+    destaque: !!candidato.destaque
+  }));
+
+  const marcela = {
+    nome: ELECTION_STATE.candidata?.nome || 'MARCELA PASSAMANI',
+    numero: ELECTION_STATE.candidata?.numero || '15555',
+    partido: ELECTION_STATE.candidata?.partido || 'MDB',
+    votos: Number(ELECTION_STATE.candidata?.votos || 0),
+    percentualValidos: Number(ELECTION_STATE.candidata?.percentualValidos || 0),
+    posicaoRanking: Number(ELECTION_STATE.candidata?.posicaoRanking || 0),
+    status: ELECTION_STATE.candidata?.status || 'EM_APURACAO',
+    statusDescricao: ELECTION_STATE.candidata?.statusDescricao || 'Em Apuração',
+    probabilidadeEleicao: Number(ELECTION_STATE.candidata?.probabilidadeEleicao || 0)
+  };
+
+  const municipios = [
+    {
+      nome: 'São Sebastião',
+      uf: 'DF',
+      zonaEleitoral: '18ª ZE',
+      codigoZona: '18',
+      totalVotos: Number(ELECTION_STATE.saoSebastiao?.totalVotos || 0),
+      percentualDoDf: Number(ELECTION_STATE.saoSebastiao?.percentualDoDf || 0),
+      locais: (ELECTION_STATE.saoSebastiao?.colegios || []).map((colegio) => ({
+        codigoLocal: colegio.codigo_local,
+        nome: colegio.nome,
+        totalVotos: Number(colegio.totalColegio || 0),
+        secoes: (colegio.secoes || []).map((secao) => ({
+          secao: secao.secao,
+          votos: Number(secao.votos || 0)
+        }))
+      }))
+    }
+  ];
+
+  return {
+    origem: ELECTION_STATE.modoFonte === 'tse_oficial' ? 'TSE CDN Oficial' : 'Simulado',
+    ultimaAtualizacao: ELECTION_STATE.ultimaAtualizacao,
+    percentualApurado: Number(ELECTION_STATE.percentualApurado || 0),
+    secoesApuradas: Number(ELECTION_STATE.secoesApuradas || 0),
+    totalSecoes: Number(ELECTION_STATE.totalSecoes || 0),
+    totalVotosValidos: Number(ELECTION_STATE.totalVotosValidos || 0),
+    votosBrancos: Number(ELECTION_STATE.votosBrancos || 0),
+    votosNulos: Number(ELECTION_STATE.votosNulos || 0),
+    statusConexaoTSE: ELECTION_STATE.statusConexaoTSE,
+    idEleicao: ELECTION_STATE.idEleicao,
+    candidato: marcela,
+    ranking,
+    municipios
+  };
+}
+
+function filtrarDadosPorMunicipioZonaSecao({ municipio, zona, secao } = {}) {
+  const municipioNome = String(municipio || 'São Sebastião').trim().toLowerCase();
+  const zonaNome = String(zona || '').trim().toLowerCase();
+  const secaoNome = String(secao || '').trim().toLowerCase();
+
+  const dados = montarDadosTseDetalhados();
+  const municipioBase = (dados.municipios || []).find((item) => item.nome.toLowerCase().includes(municipioNome));
+
+  if (!municipioBase) {
+    return { municipio: null, zona: null, secao: null, locais: [] };
+  }
+
+  let locais = municipioBase.locais || [];
+  if (zonaNome) {
+    const zonaOk = zonaNome === '18' || zonaNome.includes('18') || zonaNome.includes('18ª') || zonaNome.includes('18a');
+    if (zonaOk) {
+      locais = locais;
+    }
+  }
+
+  const secoes = [];
+  for (const local of locais) {
+    for (const item of local.secoes || []) {
+      if (!secaoNome || String(item.secao).toLowerCase().includes(secaoNome)) {
+        secoes.push({
+          codigoLocal: local.codigoLocal,
+          nomeLocal: local.nome,
+          secao: item.secao,
+          votos: Number(item.votos || 0)
+        });
+      }
+    }
+  }
+
+  return {
+    municipio: {
+      nome: municipioBase.nome,
+      uf: municipioBase.uf,
+      zonaEleitoral: municipioBase.zonaEleitoral,
+      codigoZona: municipioBase.codigoZona,
+      totalVotos: municipioBase.totalVotos,
+      percentualDoDf: municipioBase.percentualDoDf
+    },
+    zona: municipioBase.zonaEleitoral,
+    secao: secaoNome ? secaoNome : null,
+    locais,
+    secoes
+  };
 }
 
 async function consultarEndpointCustomizadoTSE(urlConfigurado) {
@@ -635,7 +809,7 @@ function recalcularEleicao(pctApurado) {
 
 recalcularEleicao(25);
 ELECTION_STATE.modoFonte = 'tse_oficial';
-ELECTION_STATE.tseEndpointUrl = 'https://resultados.tse.jus.br/oficial/ele2026/600/dados-simplificados/df/df-c0007-e000600-r.json';
+ELECTION_STATE.tseEndpointUrl = obterUrlOficialPadraoTSE(ELECTION_STATE.idEleicao);
 
 // =======================================================
 // 4. CICLO DE POLLING A CADA 30 MINUTOS (OU PERSONALIZADO)
@@ -663,6 +837,65 @@ app.get('/api/apuracao', async (req, res) => {
   res.json({
     success: true,
     data: ELECTION_STATE
+  });
+});
+
+app.get('/api/tse/resultado-df', async (req, res) => {
+  try {
+    const result = await consultarFonteConfiguradaTSE();
+    const payload = montarDadosTseDetalhados();
+
+    res.json({
+      success: true,
+      result,
+      data: payload,
+      message: 'Dados do TSE agregados por candidato, município, zona e seção.'
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
+      data: montarDadosTseDetalhados()
+    });
+  }
+});
+
+app.get('/api/tse/cesp', async (req, res) => {
+  try {
+    const municipio = req.query.municipio || 'BRASILIA';
+    const zona = req.query.zona || '18';
+    const secao = req.query.secao || '';
+    const data = await executarParserCesp({ municipio, zona, secao });
+
+    res.json({
+      success: true,
+      data,
+      filtros: { municipio, zona, secao }
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
+      filtros: { municipio: req.query.municipio || 'BRASILIA', zona: req.query.zona || '18', secao: req.query.secao || '' }
+    });
+  }
+});
+
+app.get('/api/tse/municipio', (req, res) => {
+  const municipio = req.query.municipio || 'BRASILIA';
+  const zona = req.query.zona || '18';
+  const secao = req.query.secao || '';
+
+  const dados = filtrarDadosPorMunicipioZonaSecao({ municipio, zona, secao });
+
+  res.json({
+    success: true,
+    municipio: dados.municipio,
+    zona: dados.zona,
+    secao: dados.secao,
+    secoes: dados.secoes,
+    locais: dados.locais,
+    fonte: ELECTION_STATE.modoFonte
   });
 });
 
