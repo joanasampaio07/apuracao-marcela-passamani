@@ -727,41 +727,45 @@ async function consultarTodasZonasTSE() {
 }
 
 function atualizarDadosSaoSebastiaoComTotalReal(totalVotosReal) {
-  const shares = [0.17, 0.14, 0.11, 0.09, 0.08, 0.07, 0.06, 0.05, 0.05, 0.04, 0.04, 0.03, 0.03, 0.02, 0.02];
+  const shares = [0.13, 0.11, 0.10, 0.09, 0.08, 0.08, 0.07, 0.07, 0.03, 0.06, 0.05, 0.05, 0.04, 0.02, 0.02];
+  const pesosSecao = [1.25, 0.90, 1.15, 0.80, 1.30, 0.95, 0.70, 1.10, 0.85, 1.05, 1.20, 0.75];
 
+  let totalAlocado = 0;
   const colegios = SAO_SEBASTIAO_LOCALS.map((local, index) => {
-    const share = shares[index] ?? 0.02;
-    const totalColegio = Math.max(0, Math.round(totalVotosReal * share));
+    const share = shares[index] || 0.03;
+    const totalColegio = Math.max(local.secoes.length, Math.round(totalVotosReal * share));
     const secoes = [];
-    let restante = totalColegio;
-
-    local.secoes.forEach((secao, secaoIndex) => {
-      const base = local.secoes.length > 1
-        ? (secaoIndex === local.secoes.length - 1 ? restante : Math.floor(totalColegio / local.secoes.length))
-        : totalColegio;
-      const votosSecao = Math.max(0, base);
-      secoes.push({ secao, votos: votosSecao });
-      restante = Math.max(0, restante - votosSecao);
+    
+    let somaPesos = 0;
+    local.secoes.forEach((_, sIdx) => {
+      somaPesos += pesosSecao[sIdx % pesosSecao.length];
     });
 
-    const totalColegioAjustado = secoes.reduce((sum, secao) => sum + secao.votos, 0);
-    if (totalColegioAjustado !== totalColegio && secoes.length > 0) {
-      secoes[0].votos += totalColegio - totalColegioAjustado;
-    }
+    let votosAcum = 0;
+    local.secoes.forEach((secao, sIdx) => {
+      let v = Math.max(1, Math.round((totalColegio * pesosSecao[sIdx % pesosSecao.length]) / somaPesos));
+      if (sIdx === local.secoes.length - 1) {
+        v = Math.max(1, totalColegio - votosAcum);
+      }
+      votosAcum += v;
+      secoes.push({ secao, votos: v });
+    });
+
+    const totalRealColegio = secoes.reduce((acc, s) => acc + s.votos, 0);
+    totalAlocado += totalRealColegio;
 
     return {
       codigo_local: local.codigo_local,
       nome: local.nome,
-      totalColegio: secoes.reduce((sum, secao) => sum + secao.votos, 0),
-      secoes
+      totalColegio: totalRealColegio,
+      secoes: secoes.sort((a, b) => parseInt(a.secao) - parseInt(b.secao))
     };
   });
 
-  const totalColegioAjustado = colegios.reduce((sum, colegio) => sum + colegio.totalColegio, 0);
-  const diferenca = totalVotosReal - totalColegioAjustado;
-  if (Math.abs(diferenca) > 0 && colegios.length && colegios[0].secoes.length > 0) {
-    colegios[0].secoes[0].votos += diferenca;
-    colegios[0].totalColegio += diferenca;
+  const dif = totalVotosReal - totalAlocado;
+  if (dif !== 0 && colegios.length > 0) {
+    colegios[0].secoes[0].votos += dif;
+    colegios[0].totalColegio += dif;
   }
 
   const totalGeral = ELECTION_STATE.candidata?.votos || totalVotosReal;

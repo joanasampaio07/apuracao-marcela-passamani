@@ -479,6 +479,37 @@ function renderRegionalList(votosPorZona) {
   `).join('');
 }
 
+function renderRegionalList(votosPorZona) {
+  const container = document.getElementById('regionalList');
+  if (!container || !votosPorZona) return;
+
+  const zonasArray = Object.entries(votosPorZona).map(([nome, votos]) => ({
+    nome,
+    votos: Number(votos || 0)
+  })).sort((a, b) => b.votos - a.votos);
+
+  const totalGeral = zonasArray.reduce((acc, z) => acc + z.votos, 0) || 1;
+
+  container.innerHTML = `
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin-top: 12px;">
+      ${zonasArray.map((z, idx) => {
+        const pct = ((z.votos / totalGeral) * 100).toFixed(1);
+        const isSS = z.nome.includes('18ª') || z.nome.includes('São Sebastião');
+        return `
+          <div style="padding:12px 14px; border-radius:12px; background: rgba(15, 23, 42, 0.85); border: 1px solid ${isSS ? '#10b981' : 'rgba(148, 163, 184, 0.16)'};">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+              <span style="font-size:0.75rem; color:#94a3b8; font-weight:700;">#${idx + 1} ${isSS ? '⭐ 18ª ZE' : ''}</span>
+              <span style="font-size:0.72rem; padding:2px 8px; border-radius:999px; background:rgba(56, 189, 248, 0.15); color:#38bdf8; font-weight:700;">${pct}%</span>
+            </div>
+            <div style="font-size:0.85rem; color:#f8fafc; font-weight:600; margin-bottom:4px;">${z.nome}</div>
+            <div class="font-mono" style="font-size:1.15rem; color:#10b981; font-weight:800;">${z.votos.toLocaleString('pt-BR')} <span style="font-size:0.75rem; font-weight:400; color:#94a3b8;">votos</span></div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
+}
+
 function renderSaoSebastiaoPanel(saoSebastiao) {
   const summary = document.getElementById('saoSebastiaoSummary');
   const list = document.getElementById('saoSebastiaoList');
@@ -494,30 +525,80 @@ function renderSaoSebastiaoPanel(saoSebastiao) {
   const totalVotos = Number(saoSebastiao.totalVotos || 0);
   const percentual = Number(saoSebastiao.percentualDoDf || 0);
 
+  // Extrair todas as seções para montar o ranking das mais votadas
+  const todasSecoes = [];
+  saoSebastiao.colegios.forEach((colegio) => {
+    (colegio.secoes || []).forEach((secao) => {
+      todasSecoes.push({
+        escola: colegio.nome,
+        secao: secao.secao,
+        votos: Number(secao.votos || 0)
+      });
+    });
+  });
+
+  todasSecoes.sort((a, b) => b.votos - a.votos);
+  const top10Secoes = todasSecoes.slice(0, 10);
+  const colegiosOrdenados = [...saoSebastiao.colegios].sort((a, b) => b.totalColegio - a.totalColegio);
+
   summary.innerHTML = `
-    <div class="sao-sebastiao-summary-main">
-      <span class="sao-sebastiao-pill">TOTAL EM SÃO SEBASTIÃO + ÁREA RURAL</span>
-      <div class="sao-sebastiao-total font-mono">${totalVotos.toLocaleString('pt-BR')} votos</div>
-      <div class="sao-sebastiao-meta">${percentual.toFixed(1)}% do total geral da Marcela no DF</div>
+    <div class="sao-sebastiao-summary-main" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(15, 23, 42, 0.9)); border: 1px solid rgba(16, 185, 129, 0.35); padding: 20px; border-radius: 16px; margin-bottom: 20px;">
+      <span class="sao-sebastiao-pill" style="background: #10b981; color: #04111d; font-weight: 800; padding: 4px 12px; border-radius: 999px;">18ª ZONA ELEITORAL • SÃO SEBASTIÃO + ÁREA RURAL</span>
+      <div class="sao-sebastiao-total font-mono" style="font-size: 2.5rem; color: #10b981; font-weight: 800; margin: 10px 0 4px 0;">${totalVotos.toLocaleString('pt-BR')} votos</div>
+      <div class="sao-sebastiao-meta" style="color: #cbd5e1; font-size: 0.95rem;">Representa <strong>${percentual.toFixed(1)}%</strong> da votação total de Marcela Passamani no DF (16.622 votos)</div>
+    </div>
+
+    <!-- CARDS DE DESTAQUE: ONDE MARCELA TEVE MAIS VOTOS EM SÃO SEBASTIÃO -->
+    <div style="margin-bottom: 24px; padding: 18px; border-radius: 14px; background: rgba(15, 23, 42, 0.9); border: 1px solid rgba(56, 189, 248, 0.3);">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
+        <h4 style="margin: 0; color: #38bdf8; font-size: 1.05rem; display: flex; align-items: center; gap: 8px;">
+          <span>🏆 Top 10 Seções Mais Votadas de São Sebastião</span>
+        </h4>
+        <span style="font-size: 0.78rem; color: #94a3b8; background: rgba(56, 189, 248, 0.1); padding: 3px 10px; border-radius: 999px;">18ª ZE Oficial</span>
+      </div>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px;">
+        ${top10Secoes.map((s, idx) => `
+          <div style="padding: 10px 14px; border-radius: 10px; background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(148, 163, 184, 0.18); display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <div style="font-size: 0.72rem; color: #f59e0b; font-weight: 700; text-transform: uppercase;">#${idx + 1} MAIS VOTADA</div>
+              <div style="font-size: 0.9rem; font-weight: 700; color: #f8fafc;">Seção ${s.secao}</div>
+              <div style="font-size: 0.75rem; color: #94a3b8; max-width: 140px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${s.escola}">${s.escola}</div>
+            </div>
+            <div class="font-mono" style="font-size: 1.3rem; font-weight: 800; color: #10b981;">${s.votos} <span style="font-size: 0.75rem; font-weight: 400; color: #94a3b8;">votos</span></div>
+          </div>
+        `).join('')}
+      </div>
     </div>
   `;
 
-  list.innerHTML = saoSebastiao.colegios.map((colegio) => `
-    <details class="sao-sebastiao-school" open>
-      <summary>
-        <span>${colegio.nome}</span>
-        <strong>${Number(colegio.totalColegio || 0).toLocaleString('pt-BR')} votos</strong>
-      </summary>
-      <ul class="sao-sebastiao-secoes">
-        ${colegio.secoes.map((secao) => `
-          <li>
-            <span>Seção ${secao.secao}</span>
-            <strong>${Number(secao.votos || 0).toLocaleString('pt-BR')} votos</strong>
-          </li>
-        `).join('')}
-      </ul>
-    </details>
-  `).join('');
+  list.innerHTML = `
+    <div style="margin-bottom: 12px; font-size: 0.9rem; font-weight: 700; color: #cbd5e1; text-transform: uppercase; letter-spacing: 0.05em;">
+      🏫 Votação Completa por Colégio e Seção em São Sebastião (15 Locais):
+    </div>
+    ${colegiosOrdenados.map((colegio, cIdx) => `
+      <details class="sao-sebastiao-school" open style="margin-bottom: 14px; border: 1px solid rgba(148, 163, 184, 0.2); border-radius: 14px; background: rgba(15, 23, 42, 0.85); overflow: hidden;">
+        <summary style="padding: 16px 18px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: rgba(30, 41, 59, 0.5);">
+          <div>
+            <span style="font-size: 0.75rem; color: #38bdf8; font-weight: 700; text-transform: uppercase; margin-right: 6px;">#${cIdx + 1}</span>
+            <strong style="color: #f8fafc; font-size: 1rem;">${colegio.nome}</strong>
+            <span style="font-size: 0.78rem; color: #94a3b8; margin-left: 8px;">(${colegio.secoes.length} seções)</span>
+          </div>
+          <strong class="font-mono" style="color: #10b981; font-size: 1.15rem; font-weight: 800;">${Number(colegio.totalColegio || 0).toLocaleString('pt-BR')} votos</strong>
+        </summary>
+        <div style="padding: 14px 18px;">
+          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px;">
+            ${colegio.secoes.map((secao) => `
+              <div style="padding: 8px 12px; border-radius: 8px; background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(148, 163, 184, 0.15); display: flex; justify-content: space-between; align-items: center;">
+                <span style="color: #cbd5e1; font-size: 0.85rem; font-weight: 600;">Seção ${secao.secao}</span>
+                <strong class="font-mono" style="color: #10b981; font-size: 1.05rem;">${Number(secao.votos || 0)} <span style="font-size: 0.65rem; color: #94a3b8; font-weight: 400;">vts</span></strong>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </details>
+    `).join('')}
+  `;
 
   if (window.lucide) {
     window.lucide.createIcons();
