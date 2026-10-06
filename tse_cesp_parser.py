@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import argparse
 import csv
+import hashlib
 import io
 import json
 import os
@@ -11,6 +12,7 @@ import zipfile
 from typing import List
 
 DEFAULT_URL = "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2026/correspesp/CESP_1t_DF_041020261259.zip"
+DEFAULT_SHA_URL = DEFAULT_URL + ".sha512"
 
 
 def normalize(value):
@@ -33,15 +35,17 @@ def comparable(value):
 def parse_args():
     ap = argparse.ArgumentParser(description="Parser para arquivos CESP do TSE")
     ap.add_argument("--url", default=DEFAULT_URL, help="URL do ZIP do CESP no TSE")
+    ap.add_argument("--sha512-url", default=DEFAULT_SHA_URL, help="URL do arquivo hash SHA512 do ZIP")
     ap.add_argument("--municipio", default="", help="Filtro por município")
     ap.add_argument("--zona", default="", help="Filtro por zona eleitoral")
     ap.add_argument("--secao", default="", help="Filtro por seção eleitoral")
     ap.add_argument("--download-dir", default="", help="Diretório para manter cópia local do ZIP")
     ap.add_argument("--limit", type=int, default=200, help="Limite de registros retornados")
+    ap.add_argument("--verify-hash", action="store_true", help="Valida o SHA512 do arquivo ZIP usando o .sha512 oficial")
     return ap.parse_args()
 
 
-def download_zip(url: str, download_dir: str = "") -> str:
+def download_file(url: str, download_dir: str = "") -> str:
     tmp_dir = download_dir or os.path.join(os.getcwd(), "tmp")
     os.makedirs(tmp_dir, exist_ok=True)
     nome_arquivo = os.path.basename(url)
@@ -54,6 +58,32 @@ def download_zip(url: str, download_dir: str = "") -> str:
     with open(destino, "wb") as f:
         f.write(data)
     return destino
+
+
+def download_zip(url: str, download_dir: str = "") -> str:
+    return download_file(url, download_dir)
+
+
+def read_sha512_file(path: str) -> str:
+    with open(path, "r", encoding="utf-8", errors="ignore") as f:
+        content = f.read().strip()
+    if not content:
+        return ""
+    parts = content.split()
+    return parts[0].strip().lower() if parts else ""
+
+
+def verify_sha512(zip_path: str, sha_file_path: str = "") -> dict:
+    expected = read_sha512_file(sha_file_path) if sha_file_path else ""
+    with open(zip_path, "rb") as f:
+        actual = hashlib.sha512(f.read()).hexdigest().lower()
+
+    return {
+        "expected": expected,
+        "actual": actual,
+        "valid": bool(expected) and expected == actual,
+        "sha512_file": sha_file_path,
+    }
 
 
 def find_section_csv(zip_path: str) -> str:
@@ -116,6 +146,14 @@ def main():
     args = parse_args()
     try:
         zip_path = download_zip(args.url, args.download_dir)
+        sha512_path = ""
+        sha512_payload = {"valid": None, "expected": "", "actual": "", "sha512_file": ""}
+
+        if args.verify_hash:
+            sha512_url = args.sha512_url or (args.url + ".sha512")
+            sha512_path = download_file(sha512_url, args.download_dir)
+            sha512_payload = verify_sha512(zip_path, sha512_path)
+
         csv_name = find_section_csv(zip_path)
         with zipfile.ZipFile(zip_path, "r") as zf:
             csv_bytes = zf.read(csv_name)
@@ -125,6 +163,7 @@ def main():
             "success": True,
             "arquivo": csv_name,
             "url": args.url,
+            "sha512": sha512_payload,
             "filtros": {
                 "municipio": args.municipio,
                 "zona": args.zona,
