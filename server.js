@@ -187,17 +187,6 @@ const ELECTION_STATE = {
     ]
   }
 };
-      { nome: 'SRV-TSE-SCRAPER-CDN', ip: '10.0.4.12', cpu: '16%', mem: '38%', status: 'OK' },
-      { nome: 'SRV-GRAFANA-WARROOM', ip: '10.0.4.15', cpu: '22%', mem: '54%', status: 'OK' },
-      { nome: 'SRV-ZABBIX-MONITOR', ip: '10.0.4.10', cpu: '11%', mem: '32%', status: 'OK' },
-      { nome: 'CDN-TSE-EDGE-NODE', ip: 'resultados.tse.jus.br', cpu: '28%', mem: '60%', status: 'OK' }
-    ],
-    alertasZabbix: [
-      { id: 'AL-001', nivel: 'INFO', mensagem: 'Conexão CDN TSE ativa para Marcela Passamani (15555 MDB).', hora: new Date().toLocaleTimeString('pt-BR') },
-      { id: 'AL-002', nivel: 'INFO', mensagem: 'Monitoramento da 18ª Zona Eleitoral (São Sebastião) e DF em tempo real.', hora: new Date().toLocaleTimeString('pt-BR') }
-    ]
-  }
-};
 
 ELECTION_STATE.tseEndpointUrl = obterUrlOficialPadraoTSE(ELECTION_STATE.idEleicao);
 
