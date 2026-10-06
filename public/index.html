@@ -89,7 +89,7 @@
       <button id="btnSyncTseNowBanner" class="banner-action" type="button">Verificar agora</button>
     </div>
      
-   <!-- BANNER HERO: CANDIDATA MARCELA PASSAMANI 15555 MDB -->
+    <!-- BANNER HERO: RELATÓRIO OFICIAL MARCELA PASSAMANI 15555 MDB -->
     <section class="candidate-hero-card" id="candidateHeroCard">
       <div class="hero-left">
         <div class="portrait-wrapper">
@@ -103,18 +103,18 @@
           <div class="badge-row">
             <span class="party-tag mdb-tag">MDB</span>
             <span class="coligacao-tag">MDB / PP / UNIÃO / AVANTE</span>
-            <span class="rank-tag" id="rankingBadge">#3 LUGAR GERAL</span>
+            <span class="rank-tag" id="rankingBadge" style="background: rgba(245, 158, 11, 0.2); color: #fcd34d; border: 1px solid rgba(245, 158, 11, 0.4);">29ª COLOCADA GERAL (SUPLENTE)</span>
           </div>
           <h2 class="candidate-name">MARCELA PASSAMANI</h2>
-          <p class="candidate-role">Candidata a Deputada Distrital • Número 15.555 • MDB - DF</p>
+          <p class="candidate-role">Deputada Distrital (Candidata 15.555 • MDB - DF) • Totalização Oficial TSE</p>
           
-          <!-- Status Dinâmico de Eleição -->
-          <div class="status-indicator-box" id="statusIndicatorBox">
+          <!-- Status Oficial do Resultado -->
+          <div class="status-indicator-box" id="statusIndicatorBox" style="border-color: rgba(245, 158, 11, 0.4); background: rgba(15, 23, 42, 0.85);">
             <div class="status-main">
-              <span class="status-pulse-dot" id="statusDot"></span>
-              <span class="status-text" id="statusText">EM APURAÇÃO - DENTRO DAS VAGAS</span>
+              <span class="status-pulse-dot" id="statusDot" style="background: #f59e0b; box-shadow: 0 0 10px #f59e0b;"></span>
+              <span class="status-text" id="statusText" style="color: #fcd34d;">RESULTADO OFICIAL: SUPLENTE (29º LUGAR NO DF)</span>
             </div>
-            <div class="status-sub" id="statusSub">Projeção matemática com dados oficiais e quociente partidário do MDB</div>
+            <div class="status-sub" id="statusSub">16.622 votos (0,98% dos votos válidos do DF) • 2ª Suplência na bancada do MDB</div>
           </div>
         </div>
       </div>
@@ -122,25 +122,25 @@
       <div class="hero-right">
         <!-- Grande Contador de Votos -->
         <div class="big-vote-counter">
-          <span class="counter-label">TOTAL DE VOTOS APURADOS</span>
-          <div class="vote-number font-mono" id="voteCountNumber">0</div>
+          <span class="counter-label">TOTAL OFICIAL DE VOTOS NO DF</span>
+          <div class="vote-number font-mono" id="voteCountNumber">16.622</div>
           <div class="vote-percentage">
-            <span id="votePercentageValid">0.00%</span> dos votos válidos do DF
+            <span id="votePercentageValid">0.98%</span> dos votos válidos do Distrito Federal
           </div>
         </div>
 
-        <!-- Termômetro de Eleição / Quociente Eleitoral -->
+        <!-- Análise da Bancada MDB e Vagas -->
         <div class="election-thermometer">
           <div class="thermometer-header">
-            <span>Meta de Segurança MDB: <strong>24.500 votos</strong></span>
-            <span class="prob-text">Probabilidade: <strong id="probNumber">88.5%</strong></span>
+            <span>Última Cadeira MDB Eleita: <strong>Hermeto (26.433 votos)</strong></span>
+            <span class="prob-text">São Sebastião (18ª ZE): <strong>841 votos</strong></span>
           </div>
           <div class="progress-bar-bg">
-            <div class="progress-bar-fill" id="probBarFill" style="width: 45%;"></div>
+            <div class="progress-bar-fill" id="probBarFill" style="width: 63%; background: linear-gradient(90deg, #38bdf8, #f59e0b);"></div>
           </div>
           <div class="thermometer-footer font-mono">
-            <span>Quociente Partidário MDB: <strong>ASSEGURADO</strong></span>
-            <span id="gapVotosText">Acompanhando apuração urna a urna</span>
+            <span>Bancada MDB Eleita: <strong>3 Cadeiras (Jaqueline, Wellington, Hermeto)</strong></span>
+            <span id="gapVotosText">Diferença para 3ª vaga MDB: 9.811 votos</span>
           </div>
         </div>
       </div>

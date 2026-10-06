@@ -379,44 +379,28 @@ function renderDashboard(state) {
   // Atualiza Hero Card Marcela Passamani 15555 MDB
   document.getElementById('voteCountNumber').innerText = cand.votos.toLocaleString('pt-BR');
   document.getElementById('votePercentageValid').innerText = `${cand.percentualValidos.toFixed(2)}%`;
-  document.getElementById('rankingBadge').innerText = `#${cand.posicaoRanking} LUGAR GERAL`;
-  document.getElementById('probNumber').innerText = `${cand.probabilidadeEleicao.toFixed(1)}%`;
+  document.getElementById('rankingBadge').innerText = `29ª COLOCADA GERAL (SUPLENTE)`;
+  document.getElementById('probNumber').innerText = `841 votos`;
   
   const probBarFill = document.getElementById('probBarFill');
-  const probWidth = Math.min(100, Math.max(5, cand.probabilidadeEleicao));
-  probBarFill.style.width = `${probWidth}%`;
+  probBarFill.style.width = `63%`;
+  probBarFill.style.background = 'linear-gradient(90deg, #38bdf8, #f59e0b)';
 
-  // Status de Eleição
+  // Status Oficial de Eleição (Suplente)
   const statusBox = document.getElementById('statusIndicatorBox');
   const statusText = document.getElementById('statusText');
   const statusSub = document.getElementById('statusSub');
   const statusDot = document.getElementById('statusDot');
   const heroCard = document.getElementById('candidateHeroCard');
 
-  if (cand.status === 'ELEITA') {
-    heroCard.classList.add('eleita-state');
-    statusBox.style.borderColor = 'var(--accent-gold)';
-    statusBox.style.background = 'rgba(245, 158, 11, 0.15)';
-    statusText.innerText = '⭐ ELEITA DEPUTADA DISTRITAL (15555 MDB)!';
-    statusText.style.color = 'var(--accent-gold-bright)';
-    statusDot.style.background = 'var(--accent-gold-bright)';
-    statusDot.style.boxShadow = '0 0 15px var(--accent-gold)';
-    statusSub.innerText = 'CADEIRA OFICIALMENTE CONQUISTADA NA CÂMARA LEGISLATIVA DO DF';
-    
-    if (!hasPlayedVictoryFanfare) {
-      triggerVictoryModal(cand, state);
-      hasPlayedVictoryFanfare = true;
-    }
-  } else {
-    heroCard.classList.remove('eleita-state');
-    statusBox.style.borderColor = 'rgba(59, 130, 246, 0.3)';
-    statusBox.style.background = 'rgba(15, 23, 42, 0.6)';
-    statusText.innerText = cand.statusDescricao.toUpperCase();
-    statusText.style.color = '#38bdf8';
-    statusDot.style.background = 'var(--accent-cyan)';
-    statusDot.style.boxShadow = '0 0 10px var(--accent-cyan)';
-    statusSub.innerText = 'Projeção matemática com quociente partidário do MDB e dados do TSE';
-  }
+  heroCard.classList.remove('eleita-state');
+  statusBox.style.borderColor = 'rgba(245, 158, 11, 0.4)';
+  statusBox.style.background = 'rgba(15, 23, 42, 0.85)';
+  statusText.innerText = 'RESULTADO OFICIAL: SUPLENTE (29º LUGAR NO DF)';
+  statusText.style.color = '#fcd34d';
+  statusDot.style.background = '#f59e0b';
+  statusDot.style.boxShadow = '0 0 10px #f59e0b';
+  statusSub.innerText = `${cand.votos.toLocaleString('pt-BR')} votos no DF (0,98% dos votos válidos) • 841 votos na 18ª ZE (São Sebastião)`;
 
   // Quick Stats
   document.getElementById('statPercentualApurado').innerText = `${state.percentualApurado.toFixed(2)}%`;
@@ -454,9 +438,13 @@ function renderRankingTable(candidatos) {
   if (!tbody) return;
 
   tbody.innerHTML = candidatos.map(cand => {
-    const isMarcela = cand.destaque;
+    const isMarcela = cand.destaque || cand.numero === '15555';
     let badgeClass = 'status-blue';
-    if (cand.status.toUpperCase().includes('ELEITO') || cand.status.toUpperCase().includes('ELEITA') || isMarcela) badgeClass = 'status-green';
+    if (cand.status.toUpperCase().includes('ELEITO') || cand.status.toUpperCase().includes('ELEITA')) {
+      badgeClass = 'status-green';
+    } else if (cand.status.toUpperCase().includes('SUPLENTE')) {
+      badgeClass = 'status-amber';
+    }
     
     return `
       <tr class="${isMarcela ? 'highlight-row' : ''}">
