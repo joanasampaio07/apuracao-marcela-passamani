@@ -275,12 +275,7 @@ function obterUrlOficialPadraoTSE(codigoEleicao) {
 }
 
 async function atualizarUrlOficialTsePadrao() {
-  const codigo = await descobrirCodigoEleicaoTSE();
-  if (codigo) {
-    ELECTION_STATE.idEleicao = normalizarCodigoEleicaoTSE(codigo);
-    ELECTION_STATE.tseEndpointUrl = obterUrlOficialPadraoTSE(ELECTION_STATE.idEleicao);
-    console.log(`[TSE AUTO-CONFIG] URL oficial padrão atualizada: ${ELECTION_STATE.tseEndpointUrl}`);
-  }
+  // Eleição encerrada: manter URL fixa do pleito 6259 (Distrital DF 2026)
   return ELECTION_STATE.tseEndpointUrl;
 }
 
@@ -1072,24 +1067,28 @@ function recalcularEleicao(pctApurado) {
 ELECTION_STATE.modoFonte = 'tse_oficial';
 ELECTION_STATE.tseEndpointUrl = obterUrlOficialPadraoTSE(ELECTION_STATE.idEleicao);
 
-// =======================================================
-// 4. CICLO DE POLLING A CADA 30 MINUTOS (OU PERSONALIZADO)
-// =======================================================
-let pollerInterval = setInterval(async () => {
-  console.log(`[WAR ROOM AUTO-POLLER] Executando consulta periódica ao endpoint TSE configurado (a cada 15 min)...`);
-  if (ELECTION_STATE.modoFonte === 'simulado' && ELECTION_STATE.tseEndpointUrl) {
-    await consultarEndpointCustomizadoTSE(ELECTION_STATE.tseEndpointUrl);
-  } else if (ELECTION_STATE.modoFonte === 'tse_oficial') {
-    await consultarCDNDoTSE();
-  }
-}, 15 * 60 * 1000);
+// Eleição de 2026 JÁ TOTALIZADA (100% apurado em 04/10/2026)
+// Os dados oficiais estão fixados no ELECTION_STATE acima.
+// O poller fica desativado para não sobrescrever os dados reais com o pleito errado.
+const ELEICAO_ENCERRADA = true;
 
-setTimeout(async () => {
-  if (ELECTION_STATE.modoFonte === 'tse_oficial') {
-    console.log('[WAR ROOM AUTO-POLLER] Primeira leitura oficial do TSE em andamento...');
-    await consultarCDNDoTSE();
-  }
-}, 4000);
+if (!ELEICAO_ENCERRADA) {
+  let pollerInterval = setInterval(async () => {
+    console.log(`[WAR ROOM AUTO-POLLER] Executando consulta periódica...`);
+    if (ELECTION_STATE.modoFonte === 'simulado' && ELECTION_STATE.tseEndpointUrl) {
+      await consultarEndpointCustomizadoTSE(ELECTION_STATE.tseEndpointUrl);
+    } else if (ELECTION_STATE.modoFonte === 'tse_oficial') {
+      await consultarCDNDoTSE();
+    }
+  }, 15 * 60 * 1000);
+
+  setTimeout(async () => {
+    if (ELECTION_STATE.modoFonte === 'tse_oficial') {
+      console.log('[WAR ROOM AUTO-POLLER] Primeira leitura oficial do TSE em andamento...');
+      await consultarCDNDoTSE();
+    }
+  }, 4000);
+}
 
 // =======================================================
 // 5. ROTAS DA API REST
