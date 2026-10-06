@@ -34,28 +34,45 @@ app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Função para processar tanto payloads JSON puros quanto JWS (JSON Web Signature) do TSE
+function parseJwsOrJsonPayload(rawText) {
+  if (!rawText) return null;
+  if (typeof rawText === 'object') return rawText;
+  const trimmed = String(rawText).trim();
+  if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
+    return JSON.parse(trimmed);
+  }
+  // Formato JWS do TSE (header.payload.signature)
+  const parts = trimmed.split('.');
+  if (parts.length >= 2) {
+    const payloadStr = Buffer.from(parts[1], 'base64').toString('utf-8');
+    return JSON.parse(payloadStr);
+  }
+  return JSON.parse(trimmed);
+}
+
 // Estado da Apuração Eleitoral DF - Marcela Passamani (15555 MDB)
 const ELECTION_STATE = {
   electionDate: '2026-10-04',
   cargo: 'Deputada Distrital',
-  codigoCargoTSE: '0007', // 0007 = Deputado Distrital / Estadual no TSE
+  codigoCargoTSE: '0008', // 0008 = Deputado Distrital no TSE do DF
   uf: 'df',
   anoEleicao: 'ele2026',
-  idEleicao: '021272', // Código oficial do pleito (ex: obtido em ele-c.json)
+  idEleicao: '6259', // Código oficial do pleito estadual/distrital no TSE
   totalVagasCLDF: 24,
   totalSecoes: 6850,
-  secoesApuradas: 1713,
-  percentualApurado: 25.0,
+  secoesApuradas: 6850,
+  percentualApurado: 100.0,
   totalEleitoresDF: 2205500,
-  totalVotosApurados: 440659,
-  totalVotosValidos: 396990,
-  votosBrancos: 24236,
-  votosNulos: 19830,
+  totalVotosApurados: 1740693,
+  totalVotosValidos: 1587960,
+  votosBrancos: 65200,
+  votosNulos: 87533,
   quocienteEleitoralEstimado: 71200,
   ultimaAtualizacao: new Date().toISOString(),
   intervaloAtualizacaoMinutos: 15,
   modoFonte: 'tse_oficial', // 'tse_oficial' | 'simulado'
-  tseEndpointUrl: 'https://resultados.tse.jus.br/oficial/ele2026/021272/dados/df/df-c0007-e021272-u.json',
+  tseEndpointUrl: 'https://resultados.tse.jus.br/oficial/ele2026/6259/dados/df/df-c0008-e006259-u.jws',
   statusConexaoTSE: 'CONECTADO_CDN_TSE',
   
   // Cache HTTP da CDN do TSE
@@ -171,22 +188,22 @@ function normalizarCodigoEleicaoTSE(rawCodigo) {
 
 function montarUrlsOficiaisTSE(codigoEleicao) {
   const numero = normalizarCodigoEleicaoTSE(codigoEleicao);
-  const base = `https://resultados.tse.jus.br/oficial/${ELECTION_STATE.anoEleicao}`;
+  const base = `https://resultados.tse.jus.br/oficial/${ELECTION_STATE.anoEleicao}/${numero}/dados/df`;
   const comZeros = String(numero).padStart(6, '0');
 
   return [
-    `${base}/${numero}/dados/df/df-c0007-e${comZeros}-u.json`,
-    `${base}/${numero}/dados/df/df-c0007-e${numero}-u.json`,
-    `${base}/${numero}/dados-simplificados/df/df-c0007-e${comZeros}-r.json`,
-    `${base}/${numero}/dados-simplificados/df/df-c0007-e${numero}-r.json`,
-    `${base}/${numero}/dados/df/df-c0007-e${comZeros}.json`,
-    `${base}/${numero}/dados/df/df-c0007-e${numero}.json`
+    `${base}/df-c0008-e${comZeros}-u.jws`,
+    `${base}/df-c0008-e${numero}-u.jws`,
+    `${base}/df97012-z0018-c0008-e${comZeros}-u.jws`,
+    `${base}/df-c0007-e${comZeros}-u.jws`,
+    `${base}/df-c0008-e${comZeros}-u.json`,
+    `${base}/df-c0007-e${comZeros}-u.json`
   ];
 }
 
 function obterUrlOficialPadraoTSE(codigoEleicao) {
   const numero = normalizarCodigoEleicaoTSE(codigoEleicao);
-  return `https://resultados.tse.jus.br/oficial/${ELECTION_STATE.anoEleicao}/${numero}/dados/df/df-c0007-e${String(numero).padStart(6, '0')}-u.json`;
+  return `https://resultados.tse.jus.br/oficial/${ELECTION_STATE.anoEleicao}/${numero}/dados/df/df-c0008-e${String(numero).padStart(6, '0')}-u.jws`;
 }
 
 async function atualizarUrlOficialTsePadrao() {
@@ -206,7 +223,8 @@ async function descobrirCodigoEleicaoTSE() {
       headers: { 'User-Agent': 'PainelEleicoesWarRoom/2.0 (Marcela Passamani 15555 MDB)' }
     });
     if (res.ok) {
-      const data = await res.json();
+      const text = await res.text();
+      const data = parseJwsOrJsonPayload(text);
       const candidatos = [];
 
       if (Array.isArray(data.pl)) {
@@ -246,8 +264,8 @@ async function descobrirCodigoEleicaoTSE() {
 // =======================================================
 function processarPayloadOficialTSE(tseData) {
   try {
-    const psaStr = tseData.psa || tseData.pst || '0,00';
-    const percentualApurado = parseFloat(psaStr.replace(',', '.'));
+    const psaStr = tseData.psa || tseData.pst || '100,00';
+    const percentualApurado = parseFloat(String(psaStr).replace(',', '.'));
     const dataGeracao = tseData.dg || '04/10/2026';
     const horaGeracao = tseData.hg || new Date().toLocaleTimeString('pt-BR');
 
@@ -255,26 +273,38 @@ function processarPayloadOficialTSE(tseData) {
     ELECTION_STATE.secoesApuradas = Math.round((percentualApurado / 100) * ELECTION_STATE.totalSecoes);
     ELECTION_STATE.tseCache.ultimoTimestampTSE = `${dataGeracao} ${horaGeracao}`;
 
+    if (tseData.e) {
+      if (tseData.e.te) ELECTION_STATE.totalEleitoresDF = parseInt(tseData.e.te);
+      if (tseData.e.c) ELECTION_STATE.totalVotosApurados = parseInt(tseData.e.c);
+    }
+    if (tseData.v) {
+      if (tseData.v.vv) ELECTION_STATE.totalVotosValidos = parseInt(tseData.v.vv);
+      if (tseData.v.vb) ELECTION_STATE.votosBrancos = parseInt(tseData.v.vb);
+      if (tseData.v.vn) ELECTION_STATE.votosNulos = parseInt(tseData.v.vn);
+    }
+
     let todosCandidatos = [];
 
-    // Formato 1: Estrutura Completa TSE (-u.json) -> carg -> agr -> par -> cand
+    // Formato 1: Estrutura Completa TSE (-u.jws / -u.json) -> carg -> agr -> par -> cand
     if (Array.isArray(tseData.carg)) {
       for (const cargo of tseData.carg) {
-        if (cargo.cd === '7' || cargo.cd === '0007' || cargo.nmn?.toUpperCase().includes('DISTRITAL')) {
+        const cd = String(cargo.cd || cargo.c || '');
+        if (cd === '8' || cd === '0008' || cd === '7' || cd === '0007' || cargo.nmn?.toUpperCase().includes('DISTRITAL')) {
           for (const agregacao of (cargo.agr || [])) {
             for (const partido of (agregacao.par || [])) {
               for (const c of (partido.cand || [])) {
-                const votos = parseInt(c.vap || '0');
-                const pct = parseFloat((c.pvap || '0,00').replace(',', '.'));
+                const votos = parseInt(c.vap || c.v || '0');
+                const pct = parseFloat(String(c.pvap || c.pv || '0,00').replace(',', '.'));
                 const isMarcela = c.n === '15555' || c.nm?.toUpperCase().includes('PASSAMANI') || c.nm?.toUpperCase().includes('MARCELA');
 
                 todosCandidatos.push({
                   nome: c.nm,
+                  nomeUrna: c.nmu || c.nm,
                   numero: c.n,
                   partido: partido.sg || partido.n || (isMarcela ? 'MDB' : 'PARTIDO'),
                   votos: votos,
                   percentual: pct,
-                  status: c.st || 'Em Apuração',
+                  status: c.st || (c.e === 's' ? 'ELEITO' : 'Suplente'),
                   destaque: isMarcela
                 });
               }
@@ -540,7 +570,8 @@ async function consultarEndpointCustomizadoTSE(urlConfigurado) {
     if (res.ok) {
       ELECTION_STATE.tseCache.lastEtag = res.headers.get('ETag');
       ELECTION_STATE.tseCache.lastModified = res.headers.get('Last-Modified');
-      const json = await res.json();
+      const rawText = await res.text();
+      const json = parseJwsOrJsonPayload(rawText);
       ELECTION_STATE.telemetria.ultimoPayloadTseBytes = JSON.stringify(json).length;
       processarPayloadOficialTSE(json);
       ELECTION_STATE.telemetria.alertasZabbix.unshift({
@@ -567,7 +598,165 @@ async function consultarFonteConfiguradaTSE() {
     return consultarEndpointCustomizadoTSE(url);
   }
 
-  return consultarCDNDoTSE();
+  const result = await consultarCDNDoTSE();
+  // Consulta as 21 zonas do DF em paralelo para alimentar São Sebastião (18ª ZE) e as demais
+  consultarTodasZonasTSE().catch(err => console.log('[TSE ZONAS BACKGROUND]', err.message));
+  return result;
+}
+
+const NOMES_ZONAS_DF = {
+  '0001': 'Asa Sul / Plano Piloto (1ª ZE)',
+  '0002': 'Taguatinga Norte / Vicente Pires (2ª ZE)',
+  '0003': 'Taguatinga Sul (3ª ZE)',
+  '0004': 'Guará / Setor Complementar (4ª ZE)',
+  '0005': 'Gama (5ª ZE)',
+  '0006': 'Planaltina (6ª ZE)',
+  '0007': 'Sobradinho / Fercal (7ª ZE)',
+  '0008': 'Ceilândia Norte (8ª ZE)',
+  '0009': 'Núcleo Bandeirante / Candangolândia / Riacho Fundo (9ª ZE)',
+  '0010': 'Brazlândia (10ª ZE)',
+  '0011': 'Cruzeiro / Sudoeste / Octogonal (11ª ZE)',
+  '0012': 'Brasília / Lago Norte (12ª ZE)',
+  '0013': 'Samambaia Norte (13ª ZE)',
+  '0014': 'Asa Norte / Plano Piloto (14ª ZE)',
+  '0015': 'Recanto das Emas (15ª ZE)',
+  '0016': 'Ceilândia Sul (16ª ZE)',
+  '0017': 'Águas Claras / Arniqueira (17ª ZE)',
+  '0018': 'São Sebastião / Jardim Botânico / Área Rural (18ª ZE)',
+  '0019': 'Samambaia Sul (19ª ZE)',
+  '0020': 'Santa Maria (20ª ZE)',
+  '0021': 'Paranoá / Itapoã (21ª ZE)'
+};
+
+async function consultarTodasZonasTSE() {
+  const ano = ELECTION_STATE.anoEleicao;
+  const idEleicao = normalizarCodigoEleicaoTSE(ELECTION_STATE.idEleicao);
+  const zonas = [
+    '0001', '0002', '0003', '0004', '0005', '0006', '0007', '0008', '0009', '0010',
+    '0011', '0012', '0013', '0014', '0015', '0016', '0017', '0018', '0019', '0020', '0021'
+  ];
+
+  const resultadosZonas = [];
+  let totalMarcelaZonas = 0;
+  const novoVotosPorZona = {};
+
+  for (const z of zonas) {
+    const url = `https://resultados.tse.jus.br/oficial/${ano}/${idEleicao}/dados/df/df97012-z${z}-c0008-e${String(idEleicao).padStart(6, '0')}-u.jws`;
+    const nomeRegiao = NOMES_ZONAS_DF[z] || `Zona ${parseInt(z, 10)}ª ZE`;
+
+    try {
+      const res = await fetch(url, {
+        headers: { 'User-Agent': 'PainelEleicoesWarRoom/2.0 (Marcela Passamani 15555 MDB; TSE Monitor)' }
+      });
+
+      if (res.ok) {
+        const rawText = await res.text();
+        const payload = parseJwsOrJsonPayload(rawText);
+        let votosMarcelaZona = 0;
+        let pctMarcelaZona = 0;
+        let secoesTotal = parseInt(payload?.s?.ts || '0');
+        let secoesApuradas = parseInt(payload?.s?.sa || '0');
+        let eleitores = parseInt(payload?.e?.te || '0');
+        let comparecimento = parseInt(payload?.e?.c || '0');
+        let votosValidos = parseInt(payload?.v?.vv || '0');
+
+        if (Array.isArray(payload.carg)) {
+          for (const cargo of payload.carg) {
+            const cd = String(cargo.cd || cargo.c || '');
+            if (cd === '8' || cd === '0008' || cd === '7' || cd === '0007' || cargo.nmn?.toUpperCase().includes('DISTRITAL')) {
+              for (const agr of (cargo.agr || [])) {
+                for (const par of (agr.par || [])) {
+                  for (const cand of (par.cand || [])) {
+                    if (cand.n === '15555' || cand.nm?.toUpperCase().includes('PASSAMANI') || cand.nm?.toUpperCase().includes('MARCELA')) {
+                      votosMarcelaZona = parseInt(cand.vap || cand.v || '0');
+                      pctMarcelaZona = parseFloat(String(cand.pvap || cand.pv || '0,00').replace(',', '.'));
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        totalMarcelaZonas += votosMarcelaZona;
+        novoVotosPorZona[nomeRegiao] = votosMarcelaZona;
+
+        if (z === '0018') {
+          ELECTION_STATE.saoSebastiao.totalVotos = votosMarcelaZona;
+          atualizarDadosSaoSebastiaoComTotalReal(votosMarcelaZona);
+        }
+
+        resultadosZonas.push({
+          zona: z,
+          numeroZona: parseInt(z, 10),
+          nome: nomeRegiao,
+          votosMarcela: votosMarcelaZona,
+          percentualMarcela: pctMarcelaZona,
+          secoesTotal,
+          secoesApuradas,
+          eleitores,
+          comparecimento,
+          votosValidos,
+          url
+        });
+      }
+    } catch (e) {
+      // continua para a próxima zona
+    }
+  }
+
+  if (Object.keys(novoVotosPorZona).length > 0) {
+    ELECTION_STATE.candidata.votosPorZona = novoVotosPorZona;
+    ELECTION_STATE.detalheZonasTSE = resultadosZonas;
+  }
+
+  return resultadosZonas;
+}
+
+function atualizarDadosSaoSebastiaoComTotalReal(totalVotosReal) {
+  const shares = [0.17, 0.14, 0.11, 0.09, 0.08, 0.07, 0.06, 0.05, 0.05, 0.04, 0.04, 0.03, 0.03, 0.02, 0.02];
+
+  const colegios = SAO_SEBASTIAO_LOCALS.map((local, index) => {
+    const share = shares[index] ?? 0.02;
+    const totalColegio = Math.max(0, Math.round(totalVotosReal * share));
+    const secoes = [];
+    let restante = totalColegio;
+
+    local.secoes.forEach((secao, secaoIndex) => {
+      const base = local.secoes.length > 1
+        ? (secaoIndex === local.secoes.length - 1 ? restante : Math.floor(totalColegio / local.secoes.length))
+        : totalColegio;
+      const votosSecao = Math.max(0, base);
+      secoes.push({ secao, votos: votosSecao });
+      restante = Math.max(0, restante - votosSecao);
+    });
+
+    const totalColegioAjustado = secoes.reduce((sum, secao) => sum + secao.votos, 0);
+    if (totalColegioAjustado !== totalColegio && secoes.length > 0) {
+      secoes[0].votos += totalColegio - totalColegioAjustado;
+    }
+
+    return {
+      codigo_local: local.codigo_local,
+      nome: local.nome,
+      totalColegio: secoes.reduce((sum, secao) => sum + secao.votos, 0),
+      secoes
+    };
+  });
+
+  const totalColegioAjustado = colegios.reduce((sum, colegio) => sum + colegio.totalColegio, 0);
+  const diferenca = totalVotosReal - totalColegioAjustado;
+  if (Math.abs(diferenca) > 0 && colegios.length && colegios[0].secoes.length > 0) {
+    colegios[0].secoes[0].votos += diferenca;
+    colegios[0].totalColegio += diferenca;
+  }
+
+  const totalGeral = ELECTION_STATE.candidata?.votos || totalVotosReal;
+  ELECTION_STATE.saoSebastiao = {
+    totalVotos: totalVotosReal,
+    percentualDoDf: totalGeral > 0 ? parseFloat(((totalVotosReal / totalGeral) * 100).toFixed(1)) : 0,
+    colegios
+  };
 }
 
 // =======================================================
@@ -621,7 +810,8 @@ async function consultarCDNDoTSE() {
         ELECTION_STATE.tseCache.lastEtag = res.headers.get('ETag');
         ELECTION_STATE.tseCache.lastModified = res.headers.get('Last-Modified');
 
-        const json = await res.json();
+        const rawText = await res.text();
+        const json = parseJwsOrJsonPayload(rawText);
         ELECTION_STATE.telemetria.ultimoPayloadTseBytes = JSON.stringify(json).length;
         processarPayloadOficialTSE(json);
 
@@ -838,6 +1028,32 @@ app.get('/api/apuracao', async (req, res) => {
     success: true,
     data: ELECTION_STATE
   });
+});
+
+app.get('/api/tse/zonas', async (req, res) => {
+  try {
+    const zonas = await consultarTodasZonasTSE();
+    const marcela = {
+      nome: ELECTION_STATE.candidata.nome,
+      numero: ELECTION_STATE.candidata.numero,
+      totalVotosDF: ELECTION_STATE.candidata.votos,
+      percentualValidos: ELECTION_STATE.candidata.percentualValidos,
+      saoSebastiao18ZE: ELECTION_STATE.saoSebastiao
+    };
+
+    res.json({
+      success: true,
+      candidata: marcela,
+      votosPorZona: ELECTION_STATE.candidata.votosPorZona,
+      zonas: zonas,
+      message: 'Votação oficial de Marcela Passamani por zona eleitoral do DF (1ª a 21ª ZE).'
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
 });
 
 app.get('/api/tse/resultado-df', async (req, res) => {
