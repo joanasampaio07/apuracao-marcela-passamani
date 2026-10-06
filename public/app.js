@@ -541,21 +541,41 @@ function renderZonePerformance(state) {
   const list = document.getElementById('sectionPerformanceList');
   if (!grid || !list) return;
 
-  const zonas = Object.entries(state?.candidata?.votosPorZona || {})
-    .map(([nome, votos]) => ({ nome, votos: Number(votos || 0) }))
-    .sort((a, b) => b.votos - a.votos);
+  // Usa os dados detalhados oficiais das 21 zonas do TSE se disponíveis
+  let zonas = [];
+  if (Array.isArray(state?.detalheZonasTSE) && state.detalheZonasTSE.length > 0) {
+    zonas = state.detalheZonasTSE.map(z => ({
+      nome: z.nome,
+      zonaNum: z.numeroZona,
+      votos: Number(z.votosMarcela || 0),
+      percentual: Number(z.percentualMarcela || 0),
+      isSS: z.numeroZona === 18 || z.zona === '0018'
+    }));
+  } else {
+    zonas = Object.entries(state?.candidata?.votosPorZona || {})
+      .map(([nome, votos]) => ({
+        nome,
+        votos: Number(votos || 0),
+        isSS: nome.includes('18ª') || nome.includes('São Sebastião')
+      }));
+  }
 
-  const totalGeral = zonas.reduce((sum, zona) => sum + zona.votos, 0) || 1;
+  zonas.sort((a, b) => b.votos - a.votos);
+  const totalGeral = state?.candidata?.votos || zonas.reduce((sum, z) => sum + z.votos, 0) || 1;
+
   grid.innerHTML = zonas.map((zona, index) => {
-    const pct = (zona.votos / totalGeral) * 100;
+    const pct = zona.percentual || ((zona.votos / totalGeral) * 100);
+    const isDestaqueSS = zona.isSS;
+    const borderStyle = isDestaqueSS ? 'border: 2px solid #10b981; background: rgba(16,185,129,0.12);' : 'border:1px solid rgba(148,163,184,0.16); background: rgba(15,23,42,0.7);';
+
     return `
-      <div style="padding:12px; border-radius:12px; background: rgba(15,23,42,0.7); border:1px solid rgba(148,163,184,0.16);">
+      <div style="padding:12px; border-radius:12px; ${borderStyle}">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px;">
-          <span style="font-size:0.72rem; letter-spacing:0.08em; text-transform:uppercase; color:#94a3b8;">#${index + 1}</span>
-          <span style="background: rgba(16,185,129,0.12); color:#a7f3d0; border:1px solid rgba(16,185,129,0.26); border-radius:999px; padding:3px 8px; font-size:0.7rem;">${pct.toFixed(1)}%</span>
+          <span style="font-size:0.72rem; letter-spacing:0.08em; text-transform:uppercase; color:#94a3b8;">#${index + 1} ${isDestaqueSS ? '⭐ 18ª ZE' : ''}</span>
+          <span style="background: rgba(16,185,129,0.18); color:#a7f3d0; border:1px solid rgba(16,185,129,0.3); border-radius:999px; padding:3px 8px; font-size:0.7rem; font-weight:700;">${pct.toFixed(2)}%</span>
         </div>
-        <div style="font-weight:700; color:#f8fafc; margin-bottom:6px;">${zona.nome}</div>
-        <div class="font-mono" style="font-size:1.1rem; color:#10b981;">${zona.votos.toLocaleString('pt-BR')} votos</div>
+        <div style="font-weight:700; color:#f8fafc; margin-bottom:6px; font-size:0.88rem;">${zona.nome}</div>
+        <div class="font-mono" style="font-size:1.15rem; color:#10b981; font-weight:700;">${zona.votos.toLocaleString('pt-BR')} votos</div>
       </div>
     `;
   }).join('');
@@ -631,35 +651,35 @@ function renderZabbixZones() {
 
   const zonas = [
     { num: '1ª ZE', loc: 'Asa Sul / Plano Piloto' },
-    { num: '2ª ZE', loc: 'Paranoá / Itapoã' },
-    { num: '3ª ZE', loc: 'Taguatinga Norte' },
-    { num: '4ª ZE', loc: 'Brazlândia' },
-    { num: '5ª ZE', loc: 'Gama Sul' },
+    { num: '2ª ZE', loc: 'Taguatinga Norte / Vicente Pires' },
+    { num: '3ª ZE', loc: 'Taguatinga Sul' },
+    { num: '4ª ZE', loc: 'Guará / Setor Complementar' },
+    { num: '5ª ZE', loc: 'Gama' },
     { num: '6ª ZE', loc: 'Planaltina' },
-    { num: '7ª ZE', loc: 'Sobradinho I e II' },
-    { num: '8ª ZE', loc: 'Ceilândia Centro' },
-    { num: '9ª ZE', loc: 'Guará I e II' },
-    { num: '10ª ZE', loc: 'Núcleo Bandeirante' },
-    { num: '11ª ZE', loc: 'Cruzeiro / Sudoeste' },
-    { num: '12ª ZE', loc: 'São Sebastião / Área Rural' },
+    { num: '7ª ZE', loc: 'Sobradinho / Fercal' },
+    { num: '8ª ZE', loc: 'Ceilândia Norte' },
+    { num: '9ª ZE', loc: 'Núcleo Bandeirante / Candangolândia' },
+    { num: '10ª ZE', loc: 'Brazlândia' },
+    { num: '11ª ZE', loc: 'Cruzeiro / Sudoeste / Octogonal' },
+    { num: '12ª ZE', loc: 'Brasília / Lago Norte' },
     { num: '13ª ZE', loc: 'Samambaia Norte' },
-    { num: '14ª ZE', loc: 'Asa Norte / Lago Norte' },
+    { num: '14ª ZE', loc: 'Asa Norte / Plano Piloto' },
     { num: '15ª ZE', loc: 'Recanto das Emas' },
     { num: '16ª ZE', loc: 'Ceilândia Sul' },
-    { num: '17ª ZE', loc: 'Águas Claras / Vicente Pires' },
-    { num: '18ª ZE', loc: 'Santa Maria' },
-    { num: '19ª ZE', loc: 'Taguatinga Sul' },
-    { num: '20ª ZE', loc: 'Sol Nascente / Pôr do Sol' },
-    { num: '21ª ZE', loc: 'Lago Sul / Jardim Botânico' }
+    { num: '17ª ZE', loc: 'Águas Claras / Arniqueira' },
+    { num: '18ª ZE', loc: 'São Sebastião / Jardim Botânico / Área Rural' },
+    { num: '19ª ZE', loc: 'Samambaia Sul' },
+    { num: '20ª ZE', loc: 'Santa Maria' },
+    { num: '21ª ZE', loc: 'Paranoá / Itapoã' }
   ];
 
   grid.innerHTML = zonas.map(z => `
-    <div class="zone-card">
+    <div class="zone-card" style="${z.num.includes('18ª') ? 'border: 1px solid #10b981; background: rgba(16,185,129,0.1);' : ''}">
       <div>
         <strong style="color:white;">${z.num}</strong>
         <div style="font-size:0.68rem; color:#94a3b8;">${z.loc}</div>
       </div>
-      <span class="zone-status-dot" title="Zabbix Agent Ativo"></span>
+      <span class="zone-status-dot" title="TSE Online"></span>
     </div>
   `).join('');
 }
