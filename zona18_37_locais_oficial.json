@@ -1,0 +1,2958 @@
+[
+  {
+    "local": "ESCOLA DAS NACOES",
+    "num_local": "1171",
+    "ra": "Lago Sul",
+    "tipo": "Urbano",
+    "totalSecoes": 24,
+    "totalVotosMarcela": 82,
+    "secoes": [
+      {
+        "secao": "147",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "148",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 8
+      },
+      {
+        "secao": "149",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 4
+      },
+      {
+        "secao": "150",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "151",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 6
+      },
+      {
+        "secao": "152",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 4
+      },
+      {
+        "secao": "153",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "154",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "155",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 4
+      },
+      {
+        "secao": "156",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "157",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "158",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "159",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "160",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 4
+      },
+      {
+        "secao": "198",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "290",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "298",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 4
+      },
+      {
+        "secao": "308",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "311",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "313",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 5
+      },
+      {
+        "secao": "329",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "340",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "347",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 6
+      },
+      {
+        "secao": "354",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      }
+    ]
+  },
+  {
+    "local": "COLÉGIO PRESBITERIANO MACKENZIE",
+    "num_local": "1147",
+    "ra": "Jardim Botânico",
+    "tipo": "Urbano",
+    "totalSecoes": 26,
+    "totalVotosMarcela": 73,
+    "secoes": [
+      {
+        "secao": "119",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 4
+      },
+      {
+        "secao": "120",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 4
+      },
+      {
+        "secao": "121",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "122",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 8
+      },
+      {
+        "secao": "123",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 8
+      },
+      {
+        "secao": "124",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "125",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "126",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "127",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "128",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "129",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 5
+      },
+      {
+        "secao": "296",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "323",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "333",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "357",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "369",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "374",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "378",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "381",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "386",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "388",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "393",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 5
+      },
+      {
+        "secao": "395",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 4
+      },
+      {
+        "secao": "400",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "404",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "413",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 4
+      }
+    ]
+  },
+  {
+    "local": "CENTRO EDUCACIONAL JARDINS MANGUEIRAL",
+    "num_local": "1449",
+    "ra": "Jardim Botânico",
+    "tipo": "Urbano",
+    "totalSecoes": 18,
+    "totalVotosMarcela": 48,
+    "secoes": [
+      {
+        "secao": "285",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 4
+      },
+      {
+        "secao": "288",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "292",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "293",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 4
+      },
+      {
+        "secao": "299",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 6
+      },
+      {
+        "secao": "301",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 4
+      },
+      {
+        "secao": "304",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "327",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "335",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 5
+      },
+      {
+        "secao": "337",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "341",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "343",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "346",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "348",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "352",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "356",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "358",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "379",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      }
+    ]
+  },
+  {
+    "local": "COLÉGIO DIGITAL",
+    "num_local": "1406",
+    "ra": "São Sebastião",
+    "tipo": "Urbano",
+    "totalSecoes": 21,
+    "totalVotosMarcela": 40,
+    "secoes": [
+      {
+        "secao": "200",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "210",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "212",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "218",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "226",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "233",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "239",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "247",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "252",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 4
+      },
+      {
+        "secao": "260",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "267",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "273",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "279",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "427",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 5
+      },
+      {
+        "secao": "430",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 6
+      },
+      {
+        "secao": "432",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 5
+      },
+      {
+        "secao": "434",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 4
+      },
+      {
+        "secao": "436",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "437",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "439",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "440",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      }
+    ]
+  },
+  {
+    "local": "COLÉGIO NOSSA SENHORA DO PERPÉTUO SOCORRO",
+    "num_local": "1180",
+    "ra": "São Sebastião",
+    "tipo": "Urbano",
+    "totalSecoes": 15,
+    "totalVotosMarcela": 39,
+    "secoes": [
+      {
+        "secao": "161",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "162",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "163",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "164",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "165",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "166",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "167",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 4
+      },
+      {
+        "secao": "168",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 4
+      },
+      {
+        "secao": "169",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "170",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 4
+      },
+      {
+        "secao": "171",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "172",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "173",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "174",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "283",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 6
+      }
+    ]
+  },
+  {
+    "local": "CENTRO DE ENSINO MÉDIO 01 - CENTRÃO",
+    "num_local": "1139",
+    "ra": "São Sebastião",
+    "tipo": "Urbano",
+    "totalSecoes": 20,
+    "totalVotosMarcela": 35,
+    "secoes": [
+      {
+        "secao": "105",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "106",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "107",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "108",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "109",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "110",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 5
+      },
+      {
+        "secao": "111",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "112",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "113",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "114",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "115",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "116",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 4
+      },
+      {
+        "secao": "117",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "118",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "316",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "342",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "425",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "429",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "431",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "435",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      }
+    ]
+  },
+  {
+    "local": "CENTRO DE ENSINO FUNDAMENTAL 06 DE BRASÍLIA",
+    "num_local": "1066",
+    "ra": "São Sebastião",
+    "tipo": "Urbano",
+    "totalSecoes": 10,
+    "totalVotosMarcela": 32,
+    "secoes": [
+      {
+        "secao": "17",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "18",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "19",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "20",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "21",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 5
+      },
+      {
+        "secao": "22",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "23",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 5
+      },
+      {
+        "secao": "300",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 4
+      },
+      {
+        "secao": "312",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 7
+      },
+      {
+        "secao": "319",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      }
+    ]
+  },
+  {
+    "local": "HEAVENLY INTERNATIONAL SCHOOL",
+    "num_local": "1074",
+    "ra": "Jardim Botânico",
+    "tipo": "Urbano",
+    "totalSecoes": 10,
+    "totalVotosMarcela": 31,
+    "secoes": [
+      {
+        "secao": "24",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "25",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "26",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "27",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 7
+      },
+      {
+        "secao": "28",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 6
+      },
+      {
+        "secao": "29",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 4
+      },
+      {
+        "secao": "30",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 4
+      },
+      {
+        "secao": "31",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "297",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "309",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      }
+    ]
+  },
+  {
+    "local": "INSTITUTO FEDERAL DE BRASÍLIA - IFB SÃO SEBASTIÃO",
+    "num_local": "1457",
+    "ra": "São Sebastião",
+    "tipo": "Urbano",
+    "totalSecoes": 29,
+    "totalVotosMarcela": 31,
+    "secoes": [
+      {
+        "secao": "61",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "62",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "63",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "64",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "65",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "66",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "67",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "68",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "69",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 4
+      },
+      {
+        "secao": "70",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "71",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "72",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "73",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "291",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "302",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "310",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "322",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "334",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "345",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "355",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "359",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "364",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "370",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "371",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "375",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "380",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "383",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "387",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "390",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      }
+    ]
+  },
+  {
+    "local": "ESCOLA CLASSE CAFÉ SEM TROCO",
+    "num_local": "1368",
+    "ra": "São Sebastião",
+    "tipo": "Rural",
+    "totalSecoes": 7,
+    "totalVotosMarcela": 31,
+    "secoes": [
+      {
+        "secao": "331",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 5
+      },
+      {
+        "secao": "366",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "391",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 6
+      },
+      {
+        "secao": "405",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 7
+      },
+      {
+        "secao": "426",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 4
+      },
+      {
+        "secao": "433",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "441",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 5
+      }
+    ]
+  },
+  {
+    "local": "CENTRO EDUCACIONAL DO LAGO SUL - CEL",
+    "num_local": "1058",
+    "ra": "Lago Sul",
+    "tipo": "Urbano",
+    "totalSecoes": 13,
+    "totalVotosMarcela": 31,
+    "secoes": [
+      {
+        "secao": "9",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "10",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "11",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "12",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "13",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 5
+      },
+      {
+        "secao": "14",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "15",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "16",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "305",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "321",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "330",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "361",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "368",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 6
+      }
+    ]
+  },
+  {
+    "local": "ESCOLA FRANCESA FRANÇOIS MITTERRAND",
+    "num_local": "1376",
+    "ra": "Lago Sul",
+    "tipo": "Urbano",
+    "totalSecoes": 10,
+    "totalVotosMarcela": 28,
+    "secoes": [
+      {
+        "secao": "407",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "409",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 9
+      },
+      {
+        "secao": "411",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "414",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "415",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "416",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 4
+      },
+      {
+        "secao": "417",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "421",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "423",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "424",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      }
+    ]
+  },
+  {
+    "local": "COLÉGIO DOM JOSÉ",
+    "num_local": "1309",
+    "ra": "São Sebastião",
+    "tipo": "Urbano",
+    "totalSecoes": 11,
+    "totalVotosMarcela": 26,
+    "secoes": [
+      {
+        "secao": "232",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "243",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "253",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "265",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 4
+      },
+      {
+        "secao": "278",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "289",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "295",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 5
+      },
+      {
+        "secao": "306",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "328",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "339",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "344",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      }
+    ]
+  },
+  {
+    "local": "ESCOLA CLASSE 104",
+    "num_local": "1155",
+    "ra": "São Sebastião",
+    "tipo": "Urbano",
+    "totalSecoes": 14,
+    "totalVotosMarcela": 26,
+    "secoes": [
+      {
+        "secao": "130",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "131",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "132",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "133",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "134",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "135",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 4
+      },
+      {
+        "secao": "136",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "137",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "138",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "139",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "140",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "197",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "320",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "349",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      }
+    ]
+  },
+  {
+    "local": "CENTRO DE ENSINO FUNDAMENTAL CERÂMICA SÃO PAULO",
+    "num_local": "1090",
+    "ra": "São Sebastião",
+    "tipo": "Rural",
+    "totalSecoes": 15,
+    "totalVotosMarcela": 26,
+    "secoes": [
+      {
+        "secao": "46",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 4
+      },
+      {
+        "secao": "47",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "48",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "49",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "50",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "51",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "52",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "53",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "54",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "55",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "56",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "57",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "58",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "59",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "60",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      }
+    ]
+  },
+  {
+    "local": "ESCOLA CLASSE CERAMICA DA BENCAO",
+    "num_local": "1082",
+    "ra": "São Sebastião",
+    "tipo": "Rural",
+    "totalSecoes": 14,
+    "totalVotosMarcela": 25,
+    "secoes": [
+      {
+        "secao": "32",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "33",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "34",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "35",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "36",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "37",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 6
+      },
+      {
+        "secao": "38",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "39",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "40",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 6
+      },
+      {
+        "secao": "41",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "42",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "43",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "44",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "45",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      }
+    ]
+  },
+  {
+    "local": "CENTRO DE ENSINO FUNDAMENTAL MIGUEL ARCANJO",
+    "num_local": "1350",
+    "ra": "São Sebastião",
+    "tipo": "Urbano",
+    "totalSecoes": 8,
+    "totalVotosMarcela": 23,
+    "secoes": [
+      {
+        "secao": "248",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "287",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "332",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 4
+      },
+      {
+        "secao": "363",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 4
+      },
+      {
+        "secao": "372",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 4
+      },
+      {
+        "secao": "385",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "397",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "406",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 5
+      }
+    ]
+  },
+  {
+    "local": "CENTRO EDUCACIONAL SAO BARTOLOMEU",
+    "num_local": "1252",
+    "ra": "São Sebastião",
+    "tipo": "Urbano",
+    "totalSecoes": 16,
+    "totalVotosMarcela": 20,
+    "secoes": [
+      {
+        "secao": "202",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "209",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "211",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "216",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "221",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "224",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "228",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "231",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "235",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "240",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "246",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "251",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "259",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "263",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "266",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "269",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      }
+    ]
+  },
+  {
+    "local": "CENTRO EDUCACIONAL SÃO FRANCISCO - CHICÃO",
+    "num_local": "1341",
+    "ra": "São Sebastião",
+    "tipo": "Urbano",
+    "totalSecoes": 17,
+    "totalVotosMarcela": 20,
+    "secoes": [
+      {
+        "secao": "205",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "214",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "219",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "225",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 5
+      },
+      {
+        "secao": "234",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "244",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "255",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "264",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "271",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "286",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "318",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "353",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "365",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "384",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "396",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "401",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "412",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      }
+    ]
+  },
+  {
+    "local": "ESCOLA CLASSE 303",
+    "num_local": "1031",
+    "ra": "São Sebastião",
+    "tipo": "Urbano",
+    "totalSecoes": 15,
+    "totalVotosMarcela": 17,
+    "secoes": [
+      {
+        "secao": "5",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "74",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "75",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "76",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "77",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "79",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "80",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "199",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "217",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "257",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "270",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "277",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "294",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "324",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "350",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      }
+    ]
+  },
+  {
+    "local": "ESCOLA CLASSE VILA NOVA",
+    "num_local": "1040",
+    "ra": "São Sebastião",
+    "tipo": "Urbano",
+    "totalSecoes": 14,
+    "totalVotosMarcela": 16,
+    "secoes": [
+      {
+        "secao": "6",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "7",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "8",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "196",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "213",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "227",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "245",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "261",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "280",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "314",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "377",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "392",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "398",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "408",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      }
+    ]
+  },
+  {
+    "local": "CENTRO EDUCACIONAL SAO JOSE",
+    "num_local": "1120",
+    "ra": "São Sebastião",
+    "tipo": "Urbano",
+    "totalSecoes": 14,
+    "totalVotosMarcela": 15,
+    "secoes": [
+      {
+        "secao": "92",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "93",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "94",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "95",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "96",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "97",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "98",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "99",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "100",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "101",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "102",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "103",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "104",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "317",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      }
+    ]
+  },
+  {
+    "local": "ESCOLA CLASSE VILA DO BOA",
+    "num_local": "1015",
+    "ra": "São Sebastião",
+    "tipo": "Rural",
+    "totalSecoes": 5,
+    "totalVotosMarcela": 13,
+    "secoes": [
+      {
+        "secao": "1",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 5
+      },
+      {
+        "secao": "2",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "237",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "303",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "389",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      }
+    ]
+  },
+  {
+    "local": "CENTRO DE ENSINO FUNDAMENTAL NOVA BETANIA",
+    "num_local": "1023",
+    "ra": "São Sebastião",
+    "tipo": "Rural",
+    "totalSecoes": 6,
+    "totalVotosMarcela": 12,
+    "secoes": [
+      {
+        "secao": "3",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "4",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "275",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 7
+      },
+      {
+        "secao": "360",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "403",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "422",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      }
+    ]
+  },
+  {
+    "local": "CENTRO DE ENSINO FUNDAMENTAL DO BOSQUE",
+    "num_local": "1201",
+    "ra": "São Sebastião",
+    "tipo": "Urbano",
+    "totalSecoes": 14,
+    "totalVotosMarcela": 12,
+    "secoes": [
+      {
+        "secao": "182",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "183",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "184",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "185",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "186",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "187",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "188",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "189",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "190",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "191",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "192",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "193",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "194",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "195",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      }
+    ]
+  },
+  {
+    "local": "CIEIC - CENTRO INTEGRADO IRMAOS CARVALHO",
+    "num_local": "1287",
+    "ra": "São Sebastião",
+    "tipo": "Urbano",
+    "totalSecoes": 9,
+    "totalVotosMarcela": 12,
+    "secoes": [
+      {
+        "secao": "208",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "254",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "315",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "336",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "362",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "382",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "394",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "402",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "438",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      }
+    ]
+  },
+  {
+    "local": "ESCOLA CLASSE BELA VISTA",
+    "num_local": "1244",
+    "ra": "São Sebastião",
+    "tipo": "Urbano",
+    "totalSecoes": 8,
+    "totalVotosMarcela": 11,
+    "secoes": [
+      {
+        "secao": "203",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "222",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "242",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "262",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "276",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 4
+      },
+      {
+        "secao": "338",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "373",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "410",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      }
+    ]
+  },
+  {
+    "local": "ESCOLA CLASSE 01 SHI SUL - LAGO SUL",
+    "num_local": "1210",
+    "ra": "Lago Sul",
+    "tipo": "Urbano",
+    "totalSecoes": 4,
+    "totalVotosMarcela": 10,
+    "secoes": [
+      {
+        "secao": "201",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "230",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "249",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 5
+      },
+      {
+        "secao": "282",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      }
+    ]
+  },
+  {
+    "local": "KINGDOM SCHOOL",
+    "num_local": "1295",
+    "ra": "Jardim Botânico",
+    "tipo": "Urbano",
+    "totalSecoes": 7,
+    "totalVotosMarcela": 10,
+    "secoes": [
+      {
+        "secao": "206",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "215",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "229",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "241",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "258",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "274",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "325",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      }
+    ]
+  },
+  {
+    "local": "COLEGIO MARIA IMACULADA",
+    "num_local": "1198",
+    "ra": "São Sebastião",
+    "tipo": "Urbano",
+    "totalSecoes": 7,
+    "totalVotosMarcela": 10,
+    "secoes": [
+      {
+        "secao": "175",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "176",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "177",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "178",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "179",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "180",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "181",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 4
+      }
+    ]
+  },
+  {
+    "local": "UNIDADE DE INTERNAÇÃO DE SÃO SEBASTIÃO",
+    "num_local": "1384",
+    "ra": "São Sebastião",
+    "tipo": "Urbano",
+    "totalSecoes": 1,
+    "totalVotosMarcela": 10,
+    "secoes": [
+      {
+        "secao": "419",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 10
+      }
+    ]
+  },
+  {
+    "local": "CENTRO EDUCACIONAL DO PAD/DF",
+    "num_local": "1163",
+    "ra": "São Sebastião",
+    "tipo": "Rural",
+    "totalSecoes": 6,
+    "totalVotosMarcela": 9,
+    "secoes": [
+      {
+        "secao": "141",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      },
+      {
+        "secao": "142",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "143",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "144",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "284",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "326",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 3
+      }
+    ]
+  },
+  {
+    "local": "ESCOLA CLASSE AGROVILA",
+    "num_local": "1112",
+    "ra": "São Sebastião",
+    "tipo": "Rural",
+    "totalSecoes": 12,
+    "totalVotosMarcela": 8,
+    "secoes": [
+      {
+        "secao": "81",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "82",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "83",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "84",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "85",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "86",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "87",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "88",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "89",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "90",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "91",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "307",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      }
+    ]
+  },
+  {
+    "local": "COLÉGIO MODELO DE SÃO SEBASTIÃO",
+    "num_local": "1279",
+    "ra": "São Sebastião",
+    "tipo": "Urbano",
+    "totalSecoes": 7,
+    "totalVotosMarcela": 7,
+    "secoes": [
+      {
+        "secao": "204",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "223",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "236",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "256",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "268",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      },
+      {
+        "secao": "281",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      },
+      {
+        "secao": "418",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 1
+      }
+    ]
+  },
+  {
+    "local": "COMPLEXO PENITENCIÁRIO DA PAPUDA",
+    "num_local": "1392",
+    "ra": "São Sebastião",
+    "tipo": "Urbano",
+    "totalSecoes": 1,
+    "totalVotosMarcela": 2,
+    "secoes": [
+      {
+        "secao": "420",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 2
+      }
+    ]
+  },
+  {
+    "local": "CENTRO DE ENSINO FUNDAMENTAL JARDIM II",
+    "num_local": "1317",
+    "ra": "São Sebastião",
+    "tipo": "Urbano",
+    "totalSecoes": 2,
+    "totalVotosMarcela": 0,
+    "secoes": [
+      {
+        "secao": "238",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      },
+      {
+        "secao": "367",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      }
+    ]
+  },
+  {
+    "local": "ESCOLA CLASSE LAMARÃO",
+    "num_local": "1414",
+    "ra": "São Sebastião",
+    "tipo": "Rural",
+    "totalSecoes": 1,
+    "totalVotosMarcela": 0,
+    "secoes": [
+      {
+        "secao": "428",
+        "aptos": 0,
+        "comparecimento": 0,
+        "votosMarcela": 0
+      }
+    ]
+  }
+]
