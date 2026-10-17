@@ -133,7 +133,7 @@
         "zonas": "Zona 18",
         "secoes": 285,
         "eleitorado": 89400,
-        "votosMarcela": 556,
+        "votosMarcela": 518,
         "percentualRa": "0.83%",
         "posicaoNaRa": "26º lugar"
       },
@@ -210,8 +210,8 @@
         "zonas": "Zona 18",
         "secoes": 146,
         "eleitorado": 45726,
-        "votosMarcela": 285,
-        "percentualRa": "0.83%",
+        "votosMarcela": 162,
+        "percentualRa": "0.75%",
         "posicaoNaRa": "26º lugar"
       },
       {
@@ -3223,7 +3223,7 @@
         {
           "local": "COLEGIO MARIA IMACULADA",
           "num_local": "1198",
-          "ra": "São Sebastião",
+          "ra": "Lago Sul",
           "tipo": "Urbano",
           "totalSecoes": 7,
           "totalVotosMarcela": 10,
@@ -63858,7 +63858,7 @@
       "secoesApuradas": 285,
       "eleitorado": 89400,
       "percentualApurado": "100,00%",
-      "votosMarcelaPassamani": 556,
+      "votosMarcelaPassamani": 518,
       "rankingCandidatos": [
         {
           "numero": "55123",
@@ -64065,7 +64065,7 @@
           "nome": "Marcela Passamani",
           "partido": "MDB",
           "cor": "#ff9800",
-          "votosEstimadosRa": 556,
+          "votosEstimadosRa": 518,
           "destaque": true
         },
         {
@@ -77600,7 +77600,8 @@
             }
           ]
         }
-      ]
+      ],
+      "votosMarcela": 518
     },
     {
       "id": 15,
@@ -132129,7 +132130,7 @@
       "secoesApuradas": 146,
       "eleitorado": 45726,
       "percentualApurado": "100,00%",
-      "votosMarcelaPassamani": 285,
+      "votosMarcelaPassamani": 162,
       "rankingCandidatos": [
         {
           "numero": "55123",
@@ -132336,7 +132337,7 @@
           "nome": "Marcela Passamani",
           "partido": "MDB",
           "cor": "#ff9800",
-          "votosEstimadosRa": 285,
+          "votosEstimadosRa": 162,
           "destaque": true
         },
         {
@@ -138023,7 +138024,8 @@
             }
           ]
         }
-      ]
+      ],
+      "votosMarcela": 162
     },
     {
       "id": 28,
